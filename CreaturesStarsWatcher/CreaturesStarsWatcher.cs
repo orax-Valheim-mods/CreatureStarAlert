@@ -1,30 +1,86 @@
+using System.Reflection;
 using BepInEx;
-using Jotunn.Entities;
-using Jotunn.Managers;
+using CreaturesStarsWatcher.Config;
+using CreaturesStarsWatcher.Detection;
+using CreaturesStarsWatcher.UI;
+using HarmonyLib;
+using UnityEngine;
 
 namespace CreaturesStarsWatcher
 {
+    /// <summary>
+    /// Composition root of the mod: builds every component, wires them together and
+    /// drives the work that must happen once per frame.
+    /// </summary>
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
-    [BepInDependency(Jotunn.Main.ModGuid)]
-    //[NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
-    internal class CreaturesStarsWatcher : BaseUnityPlugin
+    internal sealed class CreaturesStarsWatcher : BaseUnityPlugin
     {
         public const string PluginGUID = "orax.CreaturesStarsWatcher";
         public const string PluginName = "CreaturesStarsWatcher";
         public const string PluginVersion = "0.1.0";
 
-        // Use this class to add your own localization to the game
-        // https://valheim-modding.github.io/Jotunn/tutorials/localization.html
-        public static CustomLocalization Localization =
-            LocalizationManager.Instance.GetLocalization();
+        internal static CreaturesStarsWatcher Instance { get; private set; }
+
+        /// <summary>Entry point used by the Harmony patches to report new star creatures.</summary>
+        internal IAlertManager AlertManager { get; private set; }
+
+        private Harmony _harmony;
+        private LoadedCreatureScanner _scanner;
+        private BannerUI _banner;
+        private bool _wasInWorld;
 
         private void Awake()
         {
-            // Jotunn comes with its own Logger class to provide a consistent Log style for all mods using it
-            Jotunn.Logger.LogInfo("CreaturesStarsWatcher has landed");
+            Instance = this;
 
-            // To learn more about Jotunn's features, go to
-            // https://valheim-modding.github.io/Jotunn/tutorials/overview.html
+            var config = new PluginConfig(Config);
+            ICreatureFilter filter = new WildcardCreatureFilter(config);
+            _banner = new BannerUI(config, Logger);
+            AlertManager = new AlertManager(config, filter, _banner, Logger);
+            _scanner = new LoadedCreatureScanner(config, AlertManager);
+
+            _harmony = new Harmony(PluginGUID);
+            _harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+            Logger.LogInfo(
+                $"{PluginName} {PluginVersion} loaded: stars >= {config.StarsMinimum}, "
+                    + $"creatures '{config.CreaturePatterns}', radius {config.MaxDistance} m"
+            );
+        }
+
+        private void Update()
+        {
+            bool inWorld = Player.m_localPlayer != null;
+            if (_wasInWorld && !inWorld)
+            {
+                // Left the world: alerts and seen creatures must not leak into the next session.
+                AlertManager.Reset();
+                _scanner.Reset();
+                _banner.Clear();
+            }
+
+            _wasInWorld = inWorld;
+            if (!inWorld)
+            {
+                return;
+            }
+
+            _scanner.Tick(Time.deltaTime);
+            _banner.Tick(Time.deltaTime);
+        }
+
+        private void OnGUI()
+        {
+            _banner?.OnGui();
+        }
+
+        private void OnDestroy()
+        {
+            _harmony?.UnpatchSelf();
+            if (Instance == this)
+            {
+                Instance = null;
+            }
         }
     }
 }
