@@ -1,10 +1,9 @@
 ﻿{
-  "name": "JotunnModStub",
-  "description": "",
+  "name": "CreaturesStarsWatcher",
+  "description": "Shows an on-screen banner when a creature with n stars spawns near you. Creature list, star count, radius and banner are configurable.",
   "version_number": "0.1.0",
   "website_url": "",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2333",
-    "ValheimModding-Jotunn-2.26.1"
+    "denikson-BepInExPack_Valheim-5.4.2333"
   ]
 }
