@@ -63,5 +63,8 @@ namespace CreaturesStarsWatcher.Config
 
         /// <summary>Maximum number of alerts waiting to be displayed. The closest ones are kept.</summary>
         int MaxQueuedAlerts { get; }
+
+        /// <summary>Font size of the banner in pixels. 0 = automatic, scaled to the screen height.</summary>
+        int FontSize { get; }
     }
 }

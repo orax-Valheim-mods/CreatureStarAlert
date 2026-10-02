@@ -38,6 +38,7 @@ namespace CreaturesStarsWatcher.Config
         private readonly ConfigEntry<string> _position;
         private readonly ConfigEntry<bool> _showDistance;
         private readonly ConfigEntry<int> _maxQueuedAlerts;
+        private readonly ConfigEntry<int> _fontSize;
 
         public PluginConfig(ConfigFile file)
         {
@@ -165,6 +166,17 @@ namespace CreaturesStarsWatcher.Config
                     new AcceptableValueRange<int>(1, 10)
                 )
             );
+
+            _fontSize = file.Bind(
+                AlertSection,
+                nameof(FontSize),
+                0,
+                new ConfigDescription(
+                    "Font size of the banner in pixels. 0 = automatic (scaled to the screen "
+                        + "height).",
+                    new AcceptableValueRange<int>(0, 120)
+                )
+            );
         }
 
         public bool Enabled => _enabled.Value;
@@ -192,6 +204,8 @@ namespace CreaturesStarsWatcher.Config
         public bool ShowDistance => _showDistance.Value;
 
         public int MaxQueuedAlerts => _maxQueuedAlerts.Value;
+
+        public int FontSize => _fontSize.Value;
 
         private static BannerPosition ParsePosition(string value)
         {

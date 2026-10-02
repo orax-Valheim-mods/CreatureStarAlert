@@ -19,6 +19,8 @@ namespace CreaturesStarsWatcher.UI
         private const float FadeIn = 0.25f;
         private const float FadeOut = 0.5f;
         private const float Padding = 14f;
+
+        /// <summary>Screen height share used by the automatic font size.</summary>
         private const float ScreenHeightRatio = 0.035f;
 
         /// <summary>Metres a pending creature must win by to take the banner over.</summary>
@@ -244,7 +246,7 @@ namespace CreaturesStarsWatcher.UI
             }
 
             string text = BuildText(player, _current);
-            int fontSize = Mathf.Max(14, Mathf.RoundToInt(Screen.height * ScreenHeightRatio));
+            int fontSize = GetFontSize();
             GUIStyle style = GetLabelStyle(fontSize);
             Vector2 size = style.CalcSize(new GUIContent(text));
 
@@ -281,6 +283,17 @@ namespace CreaturesStarsWatcher.UI
             }
 
             return text;
+        }
+
+        /// <summary>Configured font size, or a screen-proportional one when set to automatic.</summary>
+        private int GetFontSize()
+        {
+            if (_config.FontSize > 0)
+            {
+                return _config.FontSize;
+            }
+
+            return Mathf.Max(14, Mathf.RoundToInt(Screen.height * ScreenHeightRatio));
         }
 
         private float GetDuration()
