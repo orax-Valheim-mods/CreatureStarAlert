@@ -16,8 +16,8 @@ with **n stars** appears near the player, so a two star moose never goes unnotic
 - The banner shows the localised name, the stars and the live distance with a
   configurable font size, and disappears as soon as the creature is unloaded or dead.
 - The closest detected creature wins the banner: a nearer one takes it over, and only
-  the best alerts are kept waiting behind it. With `Alert.PreferMostStars` enabled, the
-  creature with the most stars wins instead, ties being broken by distance.
+  the best alerts are kept waiting behind it. With the `Prefer most stars` setting
+  enabled, the creature with the most stars wins instead, ties being broken by distance.
 
 Client-side only: you do not need to install it on the server.
 
