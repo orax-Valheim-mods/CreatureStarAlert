@@ -39,10 +39,15 @@ namespace CreaturesStarsWatcher.Detection
         {
             AlertOutcome outcome = Evaluate(character, reason, out CreatureAlert alert);
 
-            if (_config.DebugLogging)
+            // Only the candidates are logged: every loaded creature is evaluated on each
+            // zone scan, and the others would quickly flood the log.
+            if (_config.DebugLogging && character != null)
             {
-                string name = character == null ? "<null>" : character.name;
-                _logger.LogDebug($"[StarsWatcher] {reason} '{name}': {outcome}");
+                int stars = character.GetLevel() - 1;
+                if (stars >= _config.StarsMinimum && outcome != AlertOutcome.AlreadyAlerted)
+                {
+                    _logger.LogDebug($"[StarsWatcher] {reason} '{character.name}': {outcome}");
+                }
             }
 
             if (outcome == AlertOutcome.Alerted)
@@ -61,6 +66,16 @@ namespace CreaturesStarsWatcher.Detection
         {
             _alerted.Clear();
             _lastAlertTime = 0f;
+        }
+
+        public void ForgetUnavailable(IEnumerable<ZDOID> loadedCreatures)
+        {
+            if (loadedCreatures == null)
+            {
+                return;
+            }
+
+            _alerted.IntersectWith(loadedCreatures);
         }
 
         private AlertOutcome Evaluate(

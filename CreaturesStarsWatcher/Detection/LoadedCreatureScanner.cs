@@ -5,15 +5,17 @@ using CreaturesStarsWatcher.Config;
 namespace CreaturesStarsWatcher.Detection
 {
     /// <summary>
-    /// Periodically scans the creatures currently loaded around the player and reports
-    /// the ones never seen before. This is what turns "a star creature is already in
-    /// this zone" into an alert, the spawn patch covering the fresh spawn case.
+    /// Scans the creatures currently loaded around the player and reports the watched
+    /// ones. Every loaded creature is evaluated on each scan; the manager owns the
+    /// anti-spam rules, this class only owns the "what is loaded right now" view and
+    /// forgets the creatures that are not instantiated anymore, so that loading a zone
+    /// again raises a new alert.
     /// </summary>
     public sealed class LoadedCreatureScanner
     {
         private readonly IDetectionConfig _config;
         private readonly IAlertManager _manager;
-        private readonly HashSet<ZDOID> _seen = new HashSet<ZDOID>();
+        private readonly HashSet<ZDOID> _loadedIds = new HashSet<ZDOID>();
 
         private float _accumulator;
 
@@ -23,20 +25,15 @@ namespace CreaturesStarsWatcher.Detection
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
 
-        /// <summary>Forgets which creatures were seen; called when leaving a world.</summary>
+        /// <summary>Forgets the loaded creatures; called when leaving a world.</summary>
         public void Reset()
         {
-            _seen.Clear();
+            _loadedIds.Clear();
             _accumulator = 0f;
         }
 
         public void Tick(float deltaTime)
         {
-            if (!_config.IncludeLoadedCreatures)
-            {
-                return;
-            }
-
             _accumulator += deltaTime;
             if (_accumulator < _config.ScanIntervalSeconds)
             {
@@ -49,6 +46,7 @@ namespace CreaturesStarsWatcher.Detection
 
         private void Scan()
         {
+            _loadedIds.Clear();
             foreach (Character character in Character.GetAllCharacters())
             {
                 if (character == null)
@@ -57,21 +55,23 @@ namespace CreaturesStarsWatcher.Detection
                 }
 
                 ZDOID id = character.GetZDOID();
-                if (id.IsNone() || _seen.Contains(id))
+                if (id.IsNone())
                 {
                     continue;
                 }
 
-                AlertOutcome outcome = _manager.Report(character, AlertReason.Loaded);
+                _loadedIds.Add(id);
 
-                // Out of range and disabled creatures stay eligible: they are evaluated
-                // again on the next scan, once the player is closer or the mod re-enabled.
-                if (outcome == AlertOutcome.OutOfRange || outcome == AlertOutcome.Disabled)
+                if (_config.IncludeLoadedCreatures)
                 {
-                    continue;
+                    _manager.Report(character, AlertReason.Loaded);
                 }
+            }
 
-                _seen.Add(id);
+            // Creatures that unloaded are forgotten, so loading them again alerts.
+            if (_config.ReAlertOnZoneLoad)
+            {
+                _manager.ForgetUnavailable(_loadedIds);
             }
         }
     }

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace CreaturesStarsWatcher.Detection
 {
     /// <summary>Result of a report sent to the <see cref="IAlertManager"/>.</summary>
@@ -25,11 +28,22 @@ namespace CreaturesStarsWatcher.Detection
     /// <summary>Turns characters into alerts, applying the filters and the anti-spam rules.</summary>
     public interface IAlertManager
     {
+        /// <summary>
+        /// Evaluates a character. Repeat calls for the same creature must stay harmless:
+        /// loaded creatures are reported on every zone scan.
+        /// </summary>
         /// <param name="character">Creature to evaluate.</param>
         /// <param name="reason">How the creature was noticed.</param>
         AlertOutcome Report(Character character, AlertReason reason);
 
         /// <summary>Forgets every alert raised during the current world session.</summary>
         void Reset();
+
+        /// <summary>
+        /// Forgets the alert of the creatures that are not instantiated anymore, so that
+        /// loading them again raises a new alert (see the ReAlertOnZoneLoad setting).
+        /// </summary>
+        /// <param name="loadedCreatures">Creatures currently instantiated.</param>
+        void ForgetUnavailable(IEnumerable<ZDOID> loadedCreatures);
     }
 }
