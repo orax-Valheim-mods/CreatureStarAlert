@@ -179,7 +179,9 @@ namespace CreatureStarAlert.Config
                 PositionCenter,
                 new ConfigDescription(
                     "Point of the banner placed at the position: TopLeft puts its top "
-                        + "left corner there, Center its centre, and so on.",
+                        + "left corner there, Center its centre, and so on. Changing it "
+                        + "barely moves the banner (by its own size at most): use "
+                        + "Position x and Position y to move the banner on screen.",
                     new AcceptableValueList<string>(
                         PositionTopLeft,
                         PositionTopCenter,

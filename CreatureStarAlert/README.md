@@ -45,7 +45,7 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | Cooldown seconds | `10` | Minimum delay between two alerts; a creature winning on the criterion is not held back. |
 | Detection | Scan interval seconds | `3` | How often loaded zones are scanned. |
 | Alert | Duration seconds | `6` | How long the banner stays on screen; `0` = until the creature is unloaded or dies. |
-| Alert | Anchor | `Center` | Point of the banner placed at the position: `TopLeft`, `TopCenter`, `TopRight`, `Left`, `Center`, `Right`, `BottomLeft`, `BottomCenter`, `BottomRight`. |
+| Alert | Anchor | `Center` | Point of the banner placed at the position: `TopLeft`, `TopCenter`, `TopRight`, `Left`, `Center`, `Right`, `BottomLeft`, `BottomCenter`, `BottomRight`. Changing it barely moves the banner: change `Position x` and `Position y` to move the banner on screen. |
 | Alert | Position unit | `Percent` | Unit of `Position x` and `Position y`: `Percent` of the screen, or `Pixels` counted from the top left corner. |
 | Alert | Position x | `50` | Horizontal position of the anchor: percent of the screen width (`0` = left edge, `100` = right edge) or pixels from the left edge. |
 | Alert | Position y | `5` | Vertical position of the anchor: percent of the screen height (`0` = top edge, `100` = bottom edge) or pixels from the top edge. |
