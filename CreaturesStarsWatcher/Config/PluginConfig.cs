@@ -108,7 +108,8 @@ namespace CreaturesStarsWatcher.Config
                 nameof(CooldownSeconds),
                 10f,
                 new ConfigDescription(
-                    "Minimum delay in seconds between two alerts. 0 = no delay.",
+                    "Minimum delay in seconds between two alerts. A nearer creature is not "
+                        + "held back. 0 = no delay.",
                     new AcceptableValueRange<float>(0f, 300f)
                 )
             );

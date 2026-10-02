@@ -32,7 +32,10 @@ namespace CreaturesStarsWatcher.Config
         /// </summary>
         bool ReAlertOnZoneLoad { get; }
 
-        /// <summary>Minimum delay in seconds between two alerts. 0 disables the cooldown.</summary>
+        /// <summary>
+        /// Minimum delay in seconds between two alerts. A nearer creature is not held back.
+        /// 0 disables the cooldown.
+        /// </summary>
         float CooldownSeconds { get; }
 
         /// <summary>How often, in seconds, loaded zones are scanned for star creatures.</summary>
