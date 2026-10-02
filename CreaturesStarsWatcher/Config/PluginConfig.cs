@@ -23,6 +23,7 @@ namespace CreaturesStarsWatcher.Config
         private readonly ConfigEntry<string> _creaturePatterns;
         private readonly ConfigEntry<float> _maxDistance;
         private readonly ConfigEntry<bool> _includeLoadedCreatures;
+        private readonly ConfigEntry<bool> _reAlertOnZoneLoad;
         private readonly ConfigEntry<float> _cooldownSeconds;
         private readonly ConfigEntry<float> _scanIntervalSeconds;
         private readonly ConfigEntry<float> _durationSeconds;
@@ -80,6 +81,14 @@ namespace CreaturesStarsWatcher.Config
                 nameof(IncludeLoadedCreatures),
                 true,
                 "Also alert for star creatures found when entering or loading a zone, not only on fresh spawns."
+            );
+
+            _reAlertOnZoneLoad = file.Bind(
+                DetectionSection,
+                nameof(ReAlertOnZoneLoad),
+                true,
+                "Forget the alert of a creature when it unloads, so loading its zone again raises a new alert. "
+                    + "When false, each creature is only alerted once per world session."
             );
 
             _cooldownSeconds = file.Bind(
@@ -153,6 +162,8 @@ namespace CreaturesStarsWatcher.Config
         public float MaxDistance => _maxDistance.Value;
 
         public bool IncludeLoadedCreatures => _includeLoadedCreatures.Value;
+
+        public bool ReAlertOnZoneLoad => _reAlertOnZoneLoad.Value;
 
         public float CooldownSeconds => _cooldownSeconds.Value;
 

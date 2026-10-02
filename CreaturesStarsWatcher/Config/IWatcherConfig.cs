@@ -22,6 +22,12 @@ namespace CreaturesStarsWatcher.Config
         /// <summary>Whether creatures already present when a zone is loaded or entered are considered.</summary>
         bool IncludeLoadedCreatures { get; }
 
+        /// <summary>
+        /// Forget the alert of a creature when it is unloaded, so that loading its zone
+        /// again raises a new alert. When false, a creature is only alerted once per world session.
+        /// </summary>
+        bool ReAlertOnZoneLoad { get; }
+
         /// <summary>Minimum delay in seconds between two alerts. 0 disables the cooldown.</summary>
         float CooldownSeconds { get; }
 
