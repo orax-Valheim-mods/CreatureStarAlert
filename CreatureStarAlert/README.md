@@ -42,7 +42,7 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | Include loaded creatures | `true` | Also alert for creatures found when entering a zone. |
 | Detection | Re alert on zone load | `true` | Alert again when a zone is loaded with the same creature. |
 | Detection | Scan interval seconds | `3` | How often loaded zones are scanned. |
-| Alert | Duration seconds | `6` | How long the banner stays on screen; `0` = until the creature is unloaded or dies. |
+| Alert | Duration seconds | `0` | How long the banner stays on screen; `0` = until the creature is unloaded or dies. |
 | Alert | Anchor | `Center` | Point of the banner placed at the position: `TopLeft`, `TopCenter`, `TopRight`, `Left`, `Center`, `Right`, `BottomLeft`, `BottomCenter`, `BottomRight`. Changing it barely moves the banner: change `Position x` and `Position y` to move the banner on screen. |
 | Alert | Position unit | `Percent` | Unit of `Position x` and `Position y`: `Percent` of the screen, or `Pixels` counted from the top left corner. |
 | Alert | Position x | `50` | Horizontal position of the anchor: percent of the screen width (`0` = left edge, `100` = right edge) or pixels from the left edge. |
