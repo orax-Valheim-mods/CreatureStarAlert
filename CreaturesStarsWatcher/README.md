@@ -35,7 +35,7 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | MaxDistance | `100` | Maximum distance in metres (capped at 500), `0` = no distance filter. |
 | Detection | IncludeLoadedCreatures | `true` | Also alert for creatures found when entering a zone. |
 | Detection | ReAlertOnZoneLoad | `true` | Alert again when a zone is loaded with the same creature. |
-| Detection | CooldownSeconds | `10` | Minimum delay between two alerts. |
+| Detection | CooldownSeconds | `10` | Minimum delay between two alerts; a nearer creature is not held back. |
 | Detection | ScanIntervalSeconds | `1` | How often loaded zones are scanned. |
 | Alert | DurationSeconds | `6` | How long the banner stays on screen. |
 | Alert | Position | `TopCenter` | `TopCenter`, `Center` or `BottomCenter`. |
