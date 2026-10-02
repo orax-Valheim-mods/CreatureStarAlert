@@ -42,7 +42,9 @@ namespace CreaturesStarsWatcher.Config
         private readonly ConfigEntry<float> _cooldownSeconds;
         private readonly ConfigEntry<float> _scanIntervalSeconds;
         private readonly ConfigEntry<float> _durationSeconds;
-        private readonly ConfigEntry<string> _position;
+        private readonly ConfigEntry<string> _anchor;
+        private readonly ConfigEntry<int> _positionX;
+        private readonly ConfigEntry<int> _positionY;
         private readonly ConfigEntry<bool> _showDistance;
         private readonly ConfigEntry<int> _maxQueuedAlerts;
         private readonly ConfigEntry<int> _fontSize;
@@ -154,13 +156,14 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _position = Bind(
+            _anchor = Bind(
                 file,
                 AlertSection,
-                nameof(Position),
+                nameof(Anchor),
                 PositionTopCenter,
                 new ConfigDescription(
-                    "Where the banner is drawn.",
+                    "Point of the banner placed at the position: TopLeft puts its top "
+                        + "left corner there, Center its centre, and so on.",
                     new AcceptableValueList<string>(
                         PositionTopLeft,
                         PositionTopCenter,
@@ -172,6 +175,30 @@ namespace CreaturesStarsWatcher.Config
                         PositionBottomCenter,
                         PositionBottomRight
                     )
+                )
+            );
+
+            _positionX = Bind(
+                file,
+                AlertSection,
+                nameof(PositionX),
+                50,
+                new ConfigDescription(
+                    "Horizontal position of the anchor in percent of the screen width: "
+                        + "0 = left edge, 100 = right edge.",
+                    new AcceptableValueRange<int>(0, 100)
+                )
+            );
+
+            _positionY = Bind(
+                file,
+                AlertSection,
+                nameof(PositionY),
+                18,
+                new ConfigDescription(
+                    "Vertical position of the anchor in percent of the screen height: "
+                        + "0 = top edge, 100 = bottom edge.",
+                    new AcceptableValueRange<int>(0, 100)
                 )
             );
 
@@ -237,7 +264,11 @@ namespace CreaturesStarsWatcher.Config
 
         public float DurationSeconds => _durationSeconds.Value;
 
-        public BannerPosition Position => ParsePosition(_position.Value);
+        public BannerAnchor Anchor => ParseAnchor(_anchor.Value);
+
+        public int PositionX => _positionX.Value;
+
+        public int PositionY => _positionY.Value;
 
         public bool ShowDistance => _showDistance.Value;
 
@@ -304,28 +335,28 @@ namespace CreaturesStarsWatcher.Config
             return key.ToString();
         }
 
-        private static BannerPosition ParsePosition(string value)
+        private static BannerAnchor ParseAnchor(string value)
         {
             switch (value?.Trim())
             {
                 case PositionTopLeft:
-                    return BannerPosition.TopLeft;
+                    return BannerAnchor.TopLeft;
                 case PositionTopRight:
-                    return BannerPosition.TopRight;
+                    return BannerAnchor.TopRight;
                 case PositionLeft:
-                    return BannerPosition.Left;
+                    return BannerAnchor.Left;
                 case PositionCenter:
-                    return BannerPosition.Center;
+                    return BannerAnchor.Center;
                 case PositionRight:
-                    return BannerPosition.Right;
+                    return BannerAnchor.Right;
                 case PositionBottomLeft:
-                    return BannerPosition.BottomLeft;
+                    return BannerAnchor.BottomLeft;
                 case PositionBottomCenter:
-                    return BannerPosition.BottomCenter;
+                    return BannerAnchor.BottomCenter;
                 case PositionBottomRight:
-                    return BannerPosition.BottomRight;
+                    return BannerAnchor.BottomRight;
                 default: // PositionTopCenter, and anything unrecognised
-                    return BannerPosition.TopCenter;
+                    return BannerAnchor.TopCenter;
             }
         }
     }

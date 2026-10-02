@@ -69,8 +69,14 @@ namespace CreaturesStarsWatcher.Config
         /// </summary>
         float DurationSeconds { get; }
 
-        /// <summary>Where the banner is drawn.</summary>
-        BannerPosition Position { get; }
+        /// <summary>Point of the banner that sits at the position.</summary>
+        BannerAnchor Anchor { get; }
+
+        /// <summary>Horizontal position of the anchor, in percent of the screen width (0 = left edge, 100 = right edge).</summary>
+        int PositionX { get; }
+
+        /// <summary>Vertical position of the anchor, in percent of the screen height (0 = top edge, 100 = bottom edge).</summary>
+        int PositionY { get; }
 
         /// <summary>Whether the live distance to the creature is displayed.</summary>
         bool ShowDistance { get; }

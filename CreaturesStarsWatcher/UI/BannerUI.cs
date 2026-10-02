@@ -21,9 +21,6 @@ namespace CreaturesStarsWatcher.UI
         private const float FadeOut = 0.5f;
         private const float Padding = 14f;
 
-        /// <summary>Share of the screen width kept between the banner and a side edge.</summary>
-        private const float SideInsetRatio = 0.05f;
-
         /// <summary>Screen height share used by the automatic font size.</summary>
         private const float ScreenHeightRatio = 0.035f;
 
@@ -285,14 +282,13 @@ namespace CreaturesStarsWatcher.UI
 
             float width = size.x + Padding * 2f;
             float height = size.y + Padding * 2f;
-            float x = GetX(_config.Position, width);
-            float y = Mathf.Round(GetTop(_config.Position, height));
+            Vector2 origin = GetOrigin(width, height);
 
             Color previousColor = GUI.color;
             GUI.color = new Color(0f, 0f, 0f, 0.65f * alpha);
-            GUI.Box(new Rect(x, y, width, height), GUIContent.none);
+            GUI.Box(new Rect(origin.x, origin.y, width, height), GUIContent.none);
             GUI.color = new Color(1f, 1f, 1f, alpha);
-            GUI.Label(new Rect(x, y, width, height), text, style);
+            GUI.Label(new Rect(origin.x, origin.y, width, height), text, style);
             GUI.color = previousColor;
         }
 
@@ -354,37 +350,55 @@ namespace CreaturesStarsWatcher.UI
             return Mathf.Clamp01(alpha);
         }
 
-        private static float GetTop(BannerPosition position, float height)
+        /// <summary>
+        /// Top left corner of the banner: the anchor point of the box is placed on the
+        /// (PositionX, PositionY) percentage of the screen, so 0,0 with the TopLeft anchor
+        /// puts the banner in the top left corner and 100,100 with the BottomRight anchor
+        /// puts it in the bottom right one.
+        /// </summary>
+        private Vector2 GetOrigin(float width, float height)
         {
-            switch (position)
+            float x = Screen.width * (_config.PositionX / 100f);
+            float y = Screen.height * (_config.PositionY / 100f);
+            return new Vector2(
+                Mathf.Round(x - AnchorOffsetX(_config.Anchor, width)),
+                Mathf.Round(y - AnchorOffsetY(_config.Anchor, height))
+            );
+        }
+
+        /// <summary>Distance from the left edge of the box to its anchor point.</summary>
+        private static float AnchorOffsetX(BannerAnchor anchor, float width)
+        {
+            switch (anchor)
             {
-                case BannerPosition.Left:
-                case BannerPosition.Center:
-                case BannerPosition.Right:
-                    return (Screen.height - height) * 0.5f;
-                case BannerPosition.BottomLeft:
-                case BannerPosition.BottomCenter:
-                case BannerPosition.BottomRight:
-                    return Screen.height * 0.78f - height;
-                default: // top row
-                    return Screen.height * 0.18f;
+                case BannerAnchor.Left:
+                case BannerAnchor.TopLeft:
+                case BannerAnchor.BottomLeft:
+                    return 0f;
+                case BannerAnchor.Right:
+                case BannerAnchor.TopRight:
+                case BannerAnchor.BottomRight:
+                    return width;
+                default:
+                    return width * 0.5f;
             }
         }
 
-        private static float GetX(BannerPosition position, float width)
+        /// <summary>Distance from the top edge of the box to its anchor point.</summary>
+        private static float AnchorOffsetY(BannerAnchor anchor, float height)
         {
-            switch (position)
+            switch (anchor)
             {
-                case BannerPosition.TopLeft:
-                case BannerPosition.Left:
-                case BannerPosition.BottomLeft:
-                    return Mathf.Round(Screen.width * SideInsetRatio);
-                case BannerPosition.TopRight:
-                case BannerPosition.Right:
-                case BannerPosition.BottomRight:
-                    return Mathf.Round(Screen.width * (1f - SideInsetRatio) - width);
+                case BannerAnchor.TopLeft:
+                case BannerAnchor.TopCenter:
+                case BannerAnchor.TopRight:
+                    return 0f;
+                case BannerAnchor.BottomLeft:
+                case BannerAnchor.BottomCenter:
+                case BannerAnchor.BottomRight:
+                    return height;
                 default:
-                    return Mathf.Round((Screen.width - width) * 0.5f);
+                    return height * 0.5f;
             }
         }
 
