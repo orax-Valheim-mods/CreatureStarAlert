@@ -7,22 +7,20 @@ namespace CreaturesStarsWatcher.Detection
 {
     /// <summary>
     /// Scans the creatures currently loaded around the player and reports the watched
-    /// ones, closest first: the manager only lets one alert through per cooldown, so
-    /// the reporting order decides which creature the player is warned about first.
-    /// Every loaded creature is evaluated on each scan; the manager owns the anti-spam
-    /// rules, this class only owns the "what is loaded right now" view and forgets the
+    /// ones, best first: the manager only lets one alert through per cooldown, so the
+    /// reporting order decides which creature the player is warned about first. Every
+    /// loaded creature is evaluated on each scan; the manager owns the anti-spam rules,
+    /// this class only owns the "what is loaded right now" view and forgets the
     /// creatures that are not instantiated anymore, so that loading a zone again raises
     /// a new alert.
     /// </summary>
     public sealed class LoadedCreatureScanner
     {
-        private static readonly Comparison<Character> ClosestFirst = (left, right) =>
-            DistanceToPlayer(left).CompareTo(DistanceToPlayer(right));
-
         private readonly IDetectionConfig _config;
         private readonly IAlertManager _manager;
         private readonly HashSet<ZDOID> _loadedIds = new HashSet<ZDOID>();
-        private readonly List<Character> _byDistance = new List<Character>();
+        private readonly List<Character> _ranked = new List<Character>();
+        private readonly Comparison<Character> _bestFirst;
 
         private float _accumulator;
 
@@ -30,13 +28,24 @@ namespace CreaturesStarsWatcher.Detection
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+
+            // Built once but reads the config on every call, so the order follows the
+            // setting changed in game.
+            _bestFirst = (left, right) =>
+                AlertPriority.Compare(
+                    left.GetLevel() - 1,
+                    DistanceToPlayer(left),
+                    right.GetLevel() - 1,
+                    DistanceToPlayer(right),
+                    _config.PreferMostStars
+                );
         }
 
         /// <summary>Forgets the loaded creatures; called when leaving a world.</summary>
         public void Reset()
         {
             _loadedIds.Clear();
-            _byDistance.Clear();
+            _ranked.Clear();
             _accumulator = 0f;
         }
 
@@ -55,7 +64,7 @@ namespace CreaturesStarsWatcher.Detection
         private void Scan()
         {
             _loadedIds.Clear();
-            _byDistance.Clear();
+            _ranked.Clear();
             foreach (Character character in Character.GetAllCharacters())
             {
                 if (character == null)
@@ -73,14 +82,14 @@ namespace CreaturesStarsWatcher.Detection
 
                 if (_config.IncludeLoadedCreatures)
                 {
-                    _byDistance.Add(character);
+                    _ranked.Add(character);
                 }
             }
 
-            // Nearest first: a herd then warns about its closest member instead of
+            // Best first: a herd then warns about its winning member instead of
             // whichever creature the game happened to enumerate first.
-            _byDistance.Sort(ClosestFirst);
-            foreach (Character character in _byDistance)
+            _ranked.Sort(_bestFirst);
+            foreach (Character character in _ranked)
             {
                 _manager.Report(character, AlertReason.Loaded);
             }

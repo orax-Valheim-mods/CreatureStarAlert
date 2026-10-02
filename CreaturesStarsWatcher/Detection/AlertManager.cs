@@ -22,6 +22,7 @@ namespace CreaturesStarsWatcher.Detection
         private readonly HashSet<ZDOID> _alerted = new HashSet<ZDOID>();
         private float _lastAlertTime;
         private float _lastAlertDistance;
+        private int _lastAlertStars;
 
         public AlertManager(
             IDetectionConfig config,
@@ -68,6 +69,7 @@ namespace CreaturesStarsWatcher.Detection
             _alerted.Clear();
             _lastAlertTime = 0f;
             _lastAlertDistance = 0f;
+            _lastAlertStars = 0;
         }
 
         public void ForgetUnavailable(IEnumerable<ZDOID> loadedCreatures)
@@ -141,9 +143,19 @@ namespace CreaturesStarsWatcher.Detection
             bool coolingDown =
                 _config.CooldownSeconds > 0f && now - _lastAlertTime < _config.CooldownSeconds;
 
-            // A nearer creature breaks the cooldown: the closest one must reach the
-            // banner first, and every creature is only alerted once anyway.
-            if (coolingDown && distance >= _lastAlertDistance)
+            // A creature that wins on the criterion breaks the cooldown: the one the
+            // banner must show cannot wait behind an alert it outranks, and every
+            // creature is only alerted once anyway.
+            if (
+                coolingDown
+                && AlertPriority.Compare(
+                    stars,
+                    distance,
+                    _lastAlertStars,
+                    _lastAlertDistance,
+                    _config.PreferMostStars
+                ) >= 0
+            )
             {
                 return AlertOutcome.Cooldown;
             }
@@ -151,6 +163,7 @@ namespace CreaturesStarsWatcher.Detection
             _alerted.Add(id);
             _lastAlertTime = now;
             _lastAlertDistance = distance;
+            _lastAlertStars = stars;
             alert = new CreatureAlert(prefabName, displayName, stars, reason, character, distance);
             return AlertOutcome.Alerted;
         }
