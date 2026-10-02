@@ -28,6 +28,7 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | Creatures | `*` | Creatures to watch, e.g. `Moose, Troll*`. `*` = everything. |
 | Detection | MaxDistance | `100` | Maximum distance in metres, `0` = unlimited. |
 | Detection | IncludeLoadedCreatures | `true` | Also alert for creatures found when entering a zone. |
+| Detection | ReAlertOnZoneLoad | `true` | Alert again when a zone is loaded with the same creature. |
 | Detection | CooldownSeconds | `10` | Minimum delay between two alerts. |
 | Detection | ScanIntervalSeconds | `1` | How often loaded zones are scanned. |
 | Alert | DurationSeconds | `6` | How long the banner stays on screen. |
