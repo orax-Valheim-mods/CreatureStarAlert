@@ -1,4 +1,4 @@
-# CreaturesStarsWatcher
+# CreatureStarAlert
 
 BepInEx mod for Valheim that displays an on-screen banner as soon as a creature
 with **n stars** appears near the player, so a two star moose never goes unnoticed.
@@ -25,9 +25,9 @@ Client-side only: you do not need to install it on the server.
 
 | Folder | Contents |
 | --- | --- |
-| `CreaturesStarsWatcher/Config` | BepInEx configuration and its interfaces |
-| `CreaturesStarsWatcher/Detection` | Filters, alert manager, zone scanner, Harmony patch |
-| `CreaturesStarsWatcher/UI` | On-screen banner (the `IAlertSink` implementation) |
+| `CreatureStarAlert/Config` | BepInEx configuration and its interfaces |
+| `CreatureStarAlert/Detection` | Filters, alert manager, zone scanner, Harmony patch |
+| `CreatureStarAlert/UI` | On-screen banner (the `IAlertSink` implementation) |
 
 ## Build
 
@@ -40,5 +40,5 @@ The post-build script deploys the DLL to the path set in `Environment.props`
 
 ## Configuration
 
-See [CreaturesStarsWatcher/README.md](CreaturesStarsWatcher/README.md) for the
+See [CreatureStarAlert/README.md](CreatureStarAlert/README.md) for the
 full list of settings.
