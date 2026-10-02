@@ -39,6 +39,7 @@ namespace CreaturesStarsWatcher.Config
         private readonly ConfigEntry<bool> _showDistance;
         private readonly ConfigEntry<int> _maxQueuedAlerts;
         private readonly ConfigEntry<int> _fontSize;
+        private readonly ConfigEntry<bool> _preferMostStars;
 
         public PluginConfig(ConfigFile file)
         {
@@ -161,8 +162,8 @@ namespace CreaturesStarsWatcher.Config
                 nameof(MaxQueuedAlerts),
                 3,
                 new ConfigDescription(
-                    "Maximum number of alerts waiting to be displayed. The closest creatures "
-                        + "are kept when it is full.",
+                    "Maximum number of alerts waiting to be displayed. The best ones on "
+                        + "the criterion are kept when it is full.",
                     new AcceptableValueRange<int>(1, 10)
                 )
             );
@@ -176,6 +177,14 @@ namespace CreaturesStarsWatcher.Config
                         + "height).",
                     new AcceptableValueRange<int>(0, 120)
                 )
+            );
+
+            _preferMostStars = file.Bind(
+                AlertSection,
+                nameof(PreferMostStars),
+                false,
+                "When several star creatures are detected, show the one with the most stars "
+                    + "instead of the closest one. Ties are always broken by distance."
             );
         }
 
@@ -206,6 +215,8 @@ namespace CreaturesStarsWatcher.Config
         public int MaxQueuedAlerts => _maxQueuedAlerts.Value;
 
         public int FontSize => _fontSize.Value;
+
+        public bool PreferMostStars => _preferMostStars.Value;
 
         private static BannerPosition ParsePosition(string value)
         {

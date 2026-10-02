@@ -1,11 +1,21 @@
 namespace CreaturesStarsWatcher.Config
 {
+    /// <summary>Criterion deciding which creature a multi creature alert is about.</summary>
+    public interface IAlertPriorityConfig
+    {
+        /// <summary>
+        /// When true the creature with the most stars wins, otherwise the closest one.
+        /// Distance always breaks ties.
+        /// </summary>
+        bool PreferMostStars { get; }
+    }
+
     /// <summary>
     /// Settings consumed by the detection pipeline.
     /// The configuration is split into small interfaces (Interface Segregation) so that
     /// every component only depends on the values it actually uses.
     /// </summary>
-    public interface IDetectionConfig
+    public interface IDetectionConfig : IAlertPriorityConfig
     {
         /// <summary>Master switch: when false nothing is detected and no alert is ever produced.</summary>
         bool Enabled { get; }
@@ -33,7 +43,8 @@ namespace CreaturesStarsWatcher.Config
         bool ReAlertOnZoneLoad { get; }
 
         /// <summary>
-        /// Minimum delay in seconds between two alerts. A nearer creature is not held back.
+        /// Minimum delay in seconds between two alerts. A creature that wins on the
+        /// selection criterion is not held back.
         /// 0 disables the cooldown.
         /// </summary>
         float CooldownSeconds { get; }
@@ -50,7 +61,7 @@ namespace CreaturesStarsWatcher.Config
     }
 
     /// <summary>Settings consumed by the banner UI.</summary>
-    public interface IBannerConfig
+    public interface IBannerConfig : IAlertPriorityConfig
     {
         /// <summary>How long a banner stays on screen, in seconds.</summary>
         float DurationSeconds { get; }
@@ -61,7 +72,7 @@ namespace CreaturesStarsWatcher.Config
         /// <summary>Whether the live distance to the creature is displayed.</summary>
         bool ShowDistance { get; }
 
-        /// <summary>Maximum number of alerts waiting to be displayed. The closest ones are kept.</summary>
+        /// <summary>Maximum number of alerts waiting to be displayed. The best ones on the criterion are kept.</summary>
         int MaxQueuedAlerts { get; }
 
         /// <summary>Font size of the banner in pixels. 0 = automatic, scaled to the screen height.</summary>

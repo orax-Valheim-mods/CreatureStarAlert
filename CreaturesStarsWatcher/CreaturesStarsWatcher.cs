@@ -46,6 +46,7 @@ namespace CreaturesStarsWatcher
                 $"{PluginName} {PluginVersion} loaded: stars >= {config.StarsMinimum}, "
                     + $"creatures '{config.CreaturePatterns}', radius "
                     + (config.MaxDistance > 0f ? $"{config.MaxDistance} m" : "no filter")
+                    + $", priority {(config.PreferMostStars ? "most stars" : "closest")}"
             );
         }
 
