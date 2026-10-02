@@ -24,6 +24,15 @@ namespace CreaturesStarsWatcher.Config
         private const string PositionBottomCenter = "BottomCenter";
         private const string PositionBottomRight = "BottomRight";
 
+        private const string PositionUnitPercent = "Percent";
+        private const string PositionUnitPixels = "Pixels";
+
+        /// <summary>
+        /// Upper bound of the Position x / Position y settings: 100 reaches the far edge
+        /// in percent mode, and in pixel mode it lies beyond any screen (8K is 7680 wide).
+        /// </summary>
+        private const int MaxScreenCoordinate = 10000;
+
         /// <summary>
         /// Upper bound of the MaxDistance setting. The game unloads zones beyond its simulation
         /// distance (2 zones of 64 m with the default settings, 5 zones at most), so a creature is
@@ -45,6 +54,7 @@ namespace CreaturesStarsWatcher.Config
         private readonly ConfigEntry<string> _anchor;
         private readonly ConfigEntry<int> _positionX;
         private readonly ConfigEntry<int> _positionY;
+        private readonly ConfigEntry<string> _positionUnit;
         private readonly ConfigEntry<bool> _showDistance;
         private readonly ConfigEntry<int> _maxQueuedAlerts;
         private readonly ConfigEntry<int> _fontSize;
@@ -184,9 +194,10 @@ namespace CreaturesStarsWatcher.Config
                 nameof(PositionX),
                 50,
                 new ConfigDescription(
-                    "Horizontal position of the anchor in percent of the screen width: "
-                        + "0 = left edge, 100 = right edge.",
-                    new AcceptableValueRange<int>(0, 100)
+                    "Horizontal position of the anchor: percent of the screen width "
+                        + "(0 = left edge, 100 = right edge), or pixels from the left edge "
+                        + "when the unit is Pixels.",
+                    new AcceptableValueRange<int>(0, MaxScreenCoordinate)
                 )
             );
 
@@ -196,9 +207,21 @@ namespace CreaturesStarsWatcher.Config
                 nameof(PositionY),
                 18,
                 new ConfigDescription(
-                    "Vertical position of the anchor in percent of the screen height: "
-                        + "0 = top edge, 100 = bottom edge.",
-                    new AcceptableValueRange<int>(0, 100)
+                    "Vertical position of the anchor: percent of the screen height "
+                        + "(0 = top edge, 100 = bottom edge), or pixels from the top edge "
+                        + "when the unit is Pixels.",
+                    new AcceptableValueRange<int>(0, MaxScreenCoordinate)
+                )
+            );
+
+            _positionUnit = Bind(
+                file,
+                AlertSection,
+                nameof(PositionUnit),
+                PositionUnitPercent,
+                new ConfigDescription(
+                    "Whether Position x and Position y are percents of the screen or pixels.",
+                    new AcceptableValueList<string>(PositionUnitPercent, PositionUnitPixels)
                 )
             );
 
@@ -269,6 +292,8 @@ namespace CreaturesStarsWatcher.Config
         public int PositionX => _positionX.Value;
 
         public int PositionY => _positionY.Value;
+
+        public PositionUnit PositionUnit => ParseUnit(_positionUnit.Value);
 
         public bool ShowDistance => _showDistance.Value;
 
@@ -357,6 +382,17 @@ namespace CreaturesStarsWatcher.Config
                     return BannerAnchor.BottomRight;
                 default: // PositionTopCenter, and anything unrecognised
                     return BannerAnchor.TopCenter;
+            }
+        }
+
+        private static PositionUnit ParseUnit(string value)
+        {
+            switch (value?.Trim())
+            {
+                case PositionUnitPixels:
+                    return PositionUnit.Pixels;
+                default: // PositionUnitPercent, and anything unrecognised
+                    return PositionUnit.Percent;
             }
         }
     }

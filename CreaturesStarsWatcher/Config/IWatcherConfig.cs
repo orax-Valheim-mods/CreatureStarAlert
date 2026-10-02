@@ -78,6 +78,9 @@ namespace CreaturesStarsWatcher.Config
         /// <summary>Vertical position of the anchor, in percent of the screen height (0 = top edge, 100 = bottom edge).</summary>
         int PositionY { get; }
 
+        /// <summary>Whether PositionX and PositionY are percents of the screen or pixels.</summary>
+        PositionUnit PositionUnit { get; }
+
         /// <summary>Whether the live distance to the creature is displayed.</summary>
         bool ShowDistance { get; }
 

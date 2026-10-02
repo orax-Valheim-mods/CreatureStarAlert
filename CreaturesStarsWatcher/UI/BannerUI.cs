@@ -352,18 +352,33 @@ namespace CreaturesStarsWatcher.UI
 
         /// <summary>
         /// Top left corner of the banner: the anchor point of the box is placed on the
-        /// (PositionX, PositionY) percentage of the screen, so 0,0 with the TopLeft anchor
-        /// puts the banner in the top left corner and 100,100 with the BottomRight anchor
-        /// puts it in the bottom right one.
+        /// (PositionX, PositionY) point of the screen, given in percents or in pixels
+        /// according to the unit, so 0,0 with the TopLeft anchor puts the banner in the
+        /// top left corner and 100,100 with the BottomRight anchor puts it in the bottom
+        /// right one.
         /// </summary>
         private Vector2 GetOrigin(float width, float height)
         {
-            float x = Screen.width * (_config.PositionX / 100f);
-            float y = Screen.height * (_config.PositionY / 100f);
+            float x = ToScreenCoordinate(_config.PositionX, Screen.width);
+            float y = ToScreenCoordinate(_config.PositionY, Screen.height);
             return new Vector2(
                 Mathf.Round(x - AnchorOffsetX(_config.Anchor, width)),
                 Mathf.Round(y - AnchorOffsetY(_config.Anchor, height))
             );
+        }
+
+        /// <summary>
+        /// Turns the configured position into a screen coordinate in pixels: a share of
+        /// the axis in percent mode, the value itself in pixels mode.
+        /// </summary>
+        private float ToScreenCoordinate(int position, float axisLength)
+        {
+            if (_config.PositionUnit == PositionUnit.Pixels)
+            {
+                return position;
+            }
+
+            return axisLength * (position / 100f);
         }
 
         /// <summary>Distance from the left edge of the box to its anchor point.</summary>
