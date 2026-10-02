@@ -62,7 +62,7 @@ namespace CreaturesStarsWatcher.Config
                 2,
                 new ConfigDescription(
                     "Minimum number of stars required to raise an alert (2 = 2 stars and above).",
-                    new AcceptableValueRange<int>(0, 3)
+                    new AcceptableValueRange<int>(0, 9)
                 )
             );
 

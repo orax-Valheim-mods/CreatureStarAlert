@@ -268,7 +268,8 @@ namespace CreaturesStarsWatcher.UI
             string name = string.IsNullOrEmpty(alert.DisplayName)
                 ? alert.PrefabName
                 : alert.DisplayName;
-            int stars = Mathf.Clamp(alert.Stars, 1, 5);
+            // Bounded like the StarsMinimum setting, which accepts up to 9 stars.
+            int stars = Mathf.Clamp(alert.Stars, 1, 9);
             string text =
                 $"<color={NameColor}>{name}</color>  <color={StarColor}>{new string('★', stars)}</color>";
 
