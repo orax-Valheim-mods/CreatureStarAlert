@@ -39,7 +39,7 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | Re alert on zone load | `true` | Alert again when a zone is loaded with the same creature. |
 | Detection | Cooldown seconds | `10` | Minimum delay between two alerts; a creature winning on the criterion is not held back. |
 | Detection | Scan interval seconds | `1` | How often loaded zones are scanned. |
-| Alert | Duration seconds | `6` | How long the banner stays on screen. |
+| Alert | Duration seconds | `6` | How long the banner stays on screen; `0` = until the creature is unloaded or dies. |
 | Alert | Position | `TopCenter` | `TopCenter`, `Center` or `BottomCenter`. |
 | Alert | Show distance | `true` | Show the live distance in the banner. |
 | Alert | Max queued alerts | `3` | Maximum number of alerts waiting to be displayed, best first. |
