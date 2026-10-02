@@ -14,9 +14,15 @@ namespace CreaturesStarsWatcher.Config
         private const string DetectionSection = "Detection";
         private const string AlertSection = "Alert";
 
+        private const string PositionTopLeft = "TopLeft";
         private const string PositionTopCenter = "TopCenter";
+        private const string PositionTopRight = "TopRight";
+        private const string PositionLeft = "Left";
         private const string PositionCenter = "Center";
+        private const string PositionRight = "Right";
+        private const string PositionBottomLeft = "BottomLeft";
         private const string PositionBottomCenter = "BottomCenter";
+        private const string PositionBottomRight = "BottomRight";
 
         /// <summary>
         /// Upper bound of the MaxDistance setting. The game unloads zones beyond its simulation
@@ -156,9 +162,15 @@ namespace CreaturesStarsWatcher.Config
                 new ConfigDescription(
                     "Where the banner is drawn.",
                     new AcceptableValueList<string>(
+                        PositionTopLeft,
                         PositionTopCenter,
+                        PositionTopRight,
+                        PositionLeft,
                         PositionCenter,
-                        PositionBottomCenter
+                        PositionRight,
+                        PositionBottomLeft,
+                        PositionBottomCenter,
+                        PositionBottomRight
                     )
                 )
             );
@@ -296,11 +308,23 @@ namespace CreaturesStarsWatcher.Config
         {
             switch (value?.Trim())
             {
+                case PositionTopLeft:
+                    return BannerPosition.TopLeft;
+                case PositionTopRight:
+                    return BannerPosition.TopRight;
+                case PositionLeft:
+                    return BannerPosition.Left;
                 case PositionCenter:
                     return BannerPosition.Center;
+                case PositionRight:
+                    return BannerPosition.Right;
+                case PositionBottomLeft:
+                    return BannerPosition.BottomLeft;
                 case PositionBottomCenter:
                     return BannerPosition.BottomCenter;
-                default:
+                case PositionBottomRight:
+                    return BannerPosition.BottomRight;
+                default: // PositionTopCenter, and anything unrecognised
                     return BannerPosition.TopCenter;
             }
         }

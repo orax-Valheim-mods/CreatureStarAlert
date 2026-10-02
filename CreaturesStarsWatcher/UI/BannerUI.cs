@@ -21,6 +21,9 @@ namespace CreaturesStarsWatcher.UI
         private const float FadeOut = 0.5f;
         private const float Padding = 14f;
 
+        /// <summary>Share of the screen width kept between the banner and a side edge.</summary>
+        private const float SideInsetRatio = 0.05f;
+
         /// <summary>Screen height share used by the automatic font size.</summary>
         private const float ScreenHeightRatio = 0.035f;
 
@@ -282,7 +285,7 @@ namespace CreaturesStarsWatcher.UI
 
             float width = size.x + Padding * 2f;
             float height = size.y + Padding * 2f;
-            float x = Mathf.Round((Screen.width - width) * 0.5f);
+            float x = GetX(_config.Position, width);
             float y = Mathf.Round(GetTop(_config.Position, height));
 
             Color previousColor = GUI.color;
@@ -355,12 +358,33 @@ namespace CreaturesStarsWatcher.UI
         {
             switch (position)
             {
+                case BannerPosition.Left:
                 case BannerPosition.Center:
+                case BannerPosition.Right:
                     return (Screen.height - height) * 0.5f;
+                case BannerPosition.BottomLeft:
                 case BannerPosition.BottomCenter:
+                case BannerPosition.BottomRight:
                     return Screen.height * 0.78f - height;
-                default:
+                default: // top row
                     return Screen.height * 0.18f;
+            }
+        }
+
+        private static float GetX(BannerPosition position, float width)
+        {
+            switch (position)
+            {
+                case BannerPosition.TopLeft:
+                case BannerPosition.Left:
+                case BannerPosition.BottomLeft:
+                    return Mathf.Round(Screen.width * SideInsetRatio);
+                case BannerPosition.TopRight:
+                case BannerPosition.Right:
+                case BannerPosition.BottomRight:
+                    return Mathf.Round(Screen.width * (1f - SideInsetRatio) - width);
+                default:
+                    return Mathf.Round((Screen.width - width) * 0.5f);
             }
         }
 
