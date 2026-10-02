@@ -12,6 +12,8 @@ you, so you never miss a two star moose (or any other creature you configure).
   already present when you enter or load a zone.
 - One alert per creature, with a cooldown, shown as a fading banner with the
   creature name, its stars and the live distance.
+- The banner disappears as soon as the creature is unloaded (zone change) or
+  dead, and shows up again when its zone is loaded anew.
 
 This mod is client-side only: you do not need to install it on the server.
 

@@ -11,7 +11,8 @@ with **n stars** appears near the player, so a two star moose never goes unnotic
 - Covers fresh spawns (spawn system, spawners, births, summons) **and** creatures
   already present when you enter or load a zone.
 - Anti-spam: one alert per creature plus a global cooldown.
-- The banner shows the localised name, the stars and the live distance.
+- The banner shows the localised name, the stars and the live distance, and
+  disappears as soon as the creature is unloaded or dead.
 
 Client-side only: you do not need to install it on the server.
 
