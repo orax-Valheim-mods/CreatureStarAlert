@@ -151,7 +151,7 @@ namespace CreatureStarAlert.Config
                 file,
                 AlertSection,
                 nameof(DurationSeconds),
-                6f,
+                0f,
                 new ConfigDescription(
                     "How long the banner stays on screen, in seconds. 0 = keep it on "
                         + "screen until the creature is unloaded or dies.",
