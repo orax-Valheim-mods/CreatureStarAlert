@@ -58,7 +58,7 @@ namespace CreaturesStarsWatcher.Config
         /// <summary>Whether the live distance to the creature is displayed.</summary>
         bool ShowDistance { get; }
 
-        /// <summary>Maximum number of alerts waiting to be displayed.</summary>
+        /// <summary>Maximum number of alerts waiting to be displayed. The closest ones are kept.</summary>
         int MaxQueuedAlerts { get; }
     }
 }

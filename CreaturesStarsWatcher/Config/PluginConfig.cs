@@ -159,7 +159,8 @@ namespace CreaturesStarsWatcher.Config
                 nameof(MaxQueuedAlerts),
                 3,
                 new ConfigDescription(
-                    "Maximum number of alerts waiting to be displayed.",
+                    "Maximum number of alerts waiting to be displayed. The closest creatures "
+                        + "are kept when it is full.",
                     new AcceptableValueRange<int>(1, 10)
                 )
             );
