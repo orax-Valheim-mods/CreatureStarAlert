@@ -142,8 +142,9 @@ namespace CreaturesStarsWatcher.Config
                 nameof(DurationSeconds),
                 6f,
                 new ConfigDescription(
-                    "How long the banner stays on screen, in seconds.",
-                    new AcceptableValueRange<float>(1f, 120f)
+                    "How long the banner stays on screen, in seconds. 0 = keep it on "
+                        + "screen until the creature is unloaded or dies.",
+                    new AcceptableValueRange<float>(0f, 120f)
                 )
             );
 

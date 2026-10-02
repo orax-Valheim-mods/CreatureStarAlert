@@ -307,9 +307,19 @@ namespace CreaturesStarsWatcher.UI
             return Mathf.Max(14, Mathf.RoundToInt(Screen.height * ScreenHeightRatio));
         }
 
+        /// <summary>
+        /// Seconds the banner lasts. A duration of 0 keeps it on screen until the
+        /// creature is unloaded or dies, which is obtained by asking for an endless
+        /// duration: neither the expiry nor the fade out can ever trigger.
+        /// </summary>
         private float GetDuration()
         {
-            return Mathf.Max(1f, _config.DurationSeconds);
+            if (_config.DurationSeconds <= 0f)
+            {
+                return float.MaxValue;
+            }
+
+            return _config.DurationSeconds;
         }
 
         private float ComputeAlpha(float duration)

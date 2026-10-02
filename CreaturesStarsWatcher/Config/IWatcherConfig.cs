@@ -63,7 +63,10 @@ namespace CreaturesStarsWatcher.Config
     /// <summary>Settings consumed by the banner UI.</summary>
     public interface IBannerConfig : IAlertPriorityConfig
     {
-        /// <summary>How long a banner stays on screen, in seconds.</summary>
+        /// <summary>
+        /// How long a banner stays on screen, in seconds. 0 = until the creature
+        /// is unloaded or dies.
+        /// </summary>
         float DurationSeconds { get; }
 
         /// <summary>Where the banner is drawn.</summary>
