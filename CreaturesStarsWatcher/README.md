@@ -18,8 +18,10 @@ you, so you never miss a two star moose (or any other creature you configure).
 - The banner disappears as soon as the creature is unloaded (zone change) or
   dead, and shows up again when its zone is loaded anew.
 - The closest detected creature wins the banner: loaded zones are scanned best
-  first, and a nearer creature takes the banner over. With the `Prefer most stars`
-  setting, the creature with the most stars wins instead, ties being broken by distance.
+  first, and a nearer creature takes the banner over once it leads by a distance
+  that shrinks at close range (0.5 to 5 m), so stepping up to another creature a
+  few metres away switches the banner. With the `Prefer most stars` setting,
+  the creature with the most stars wins instead, ties being broken by distance.
 
 This mod is client-side only: you do not need to install it on the server.
 
