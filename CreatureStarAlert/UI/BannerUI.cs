@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using BepInEx.Logging;
-using CreaturesStarsWatcher.Config;
-using CreaturesStarsWatcher.Detection;
+using CreatureStarAlert.Config;
+using CreatureStarAlert.Detection;
 using UnityEngine;
 
-namespace CreaturesStarsWatcher.UI
+namespace CreatureStarAlert.UI
 {
     /// <summary>
     /// Screens one alert at a time behind a fading banner and keeps the winning
@@ -65,7 +65,7 @@ namespace CreaturesStarsWatcher.UI
                 if (worst < 0 || !Ranks(alert, _pending[worst], player))
                 {
                     _logger.LogDebug(
-                        $"[StarsWatcher] Banner queue is full, dropping {alert.DisplayName}"
+                        $"[StarAlert] Banner queue is full, dropping {alert.DisplayName}"
                     );
                     return;
                 }

@@ -1,6 +1,6 @@
 using HarmonyLib;
 
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Fresh spawn detection.
@@ -15,7 +15,7 @@ namespace CreaturesStarsWatcher.Detection
         [HarmonyPatch(typeof(Character), nameof(Character.SetLevel))]
         private static void Postfix(Character __instance)
         {
-            CreaturesStarsWatcher.Instance?.AlertManager?.Report(__instance, AlertReason.Spawn);
+            CreatureStarAlert.Instance?.AlertManager?.Report(__instance, AlertReason.Spawn);
         }
     }
 }

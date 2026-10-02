@@ -2,7 +2,7 @@ using System.Text;
 using BepInEx.Configuration;
 using UnityEngine;
 
-namespace CreaturesStarsWatcher.Config
+namespace CreatureStarAlert.Config
 {
     /// <summary>
     /// BepInEx backed implementation of the watcher settings.

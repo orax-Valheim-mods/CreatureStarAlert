@@ -1,4 +1,4 @@
-namespace CreaturesStarsWatcher.Config
+namespace CreatureStarAlert.Config
 {
     /// <summary>Unit used by the banner position settings.</summary>
     public enum PositionUnit

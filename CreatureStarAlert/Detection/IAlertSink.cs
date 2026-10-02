@@ -1,4 +1,4 @@
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Receives the alerts produced by the detection pipeline.

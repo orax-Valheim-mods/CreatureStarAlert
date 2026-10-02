@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>Why a creature was reported.</summary>
     public enum AlertReason

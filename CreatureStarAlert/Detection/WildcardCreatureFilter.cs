@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using CreaturesStarsWatcher.Config;
+using CreatureStarAlert.Config;
 
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Matches a comma separated list of patterns supporting the '*' wildcard,

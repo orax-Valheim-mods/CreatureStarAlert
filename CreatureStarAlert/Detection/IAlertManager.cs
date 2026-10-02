@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>Result of a report sent to the <see cref="IAlertManager"/>.</summary>
     public enum AlertOutcome

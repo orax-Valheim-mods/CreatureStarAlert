@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CreaturesStarsWatcher.Config
+namespace CreatureStarAlert.Config
 {
     /// <summary>Criterion deciding which creature a multi creature alert is about.</summary>
     public interface IAlertPriorityConfig

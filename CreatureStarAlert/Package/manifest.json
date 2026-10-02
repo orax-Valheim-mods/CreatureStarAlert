@@ -1,5 +1,5 @@
 ﻿{
-  "name": "CreaturesStarsWatcher",
+  "name": "CreatureStarAlert",
   "description": "Shows an on-screen banner when a creature with n stars spawns near you. Creature list, star count, radius and banner are configurable.",
   "version_number": "0.1.0",
   "website_url": "",

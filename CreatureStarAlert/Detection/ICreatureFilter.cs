@@ -1,4 +1,4 @@
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Decides whether a creature is watched. Implementations must be case insensitive

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using CreaturesStarsWatcher.Config;
+using CreatureStarAlert.Config;
 using UnityEngine;
 
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Scans the creatures currently loaded around the player and reports the watched

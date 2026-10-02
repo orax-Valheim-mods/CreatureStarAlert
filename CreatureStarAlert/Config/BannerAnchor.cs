@@ -1,4 +1,4 @@
-namespace CreaturesStarsWatcher.Config
+namespace CreatureStarAlert.Config
 {
     /// <summary>
     /// Point of the banner placed at the configured position: the nine points of a

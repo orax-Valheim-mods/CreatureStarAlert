@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using BepInEx.Logging;
-using CreaturesStarsWatcher.Config;
+using CreatureStarAlert.Config;
 using UnityEngine;
 
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Applies the filters (stars, creature list, distance), the anti-spam rules
@@ -48,7 +48,7 @@ namespace CreaturesStarsWatcher.Detection
                 int stars = character.GetLevel() - 1;
                 if (stars >= _config.StarsMinimum && outcome != AlertOutcome.AlreadyAlerted)
                 {
-                    _logger.LogDebug($"[StarsWatcher] {reason} '{character.name}': {outcome}");
+                    _logger.LogDebug($"[StarAlert] {reason} '{character.name}': {outcome}");
                 }
             }
 
@@ -56,7 +56,7 @@ namespace CreaturesStarsWatcher.Detection
             {
                 _sink.Enqueue(alert);
                 _logger.LogInfo(
-                    $"[StarsWatcher] {reason}: {alert.DisplayName} ({alert.PrefabName}) "
+                    $"[StarAlert] {reason}: {alert.DisplayName} ({alert.PrefabName}) "
                         + $"with {alert.Stars} star(s) at {alert.Distance:0} m"
                 );
             }

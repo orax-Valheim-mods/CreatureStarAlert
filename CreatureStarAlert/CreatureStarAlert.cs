@@ -1,25 +1,25 @@
 using System.Reflection;
 using BepInEx;
-using CreaturesStarsWatcher.Config;
-using CreaturesStarsWatcher.Detection;
-using CreaturesStarsWatcher.UI;
+using CreatureStarAlert.Config;
+using CreatureStarAlert.Detection;
+using CreatureStarAlert.UI;
 using HarmonyLib;
 using UnityEngine;
 
-namespace CreaturesStarsWatcher
+namespace CreatureStarAlert
 {
     /// <summary>
     /// Composition root of the mod: builds every component, wires them together and
     /// drives the work that must happen once per frame.
     /// </summary>
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
-    internal sealed class CreaturesStarsWatcher : BaseUnityPlugin
+    internal sealed class CreatureStarAlert : BaseUnityPlugin
     {
-        public const string PluginGUID = "orax.CreaturesStarsWatcher";
-        public const string PluginName = "CreaturesStarsWatcher";
+        public const string PluginGUID = "orax.CreatureStarAlert";
+        public const string PluginName = "CreatureStarAlert";
         public const string PluginVersion = "0.1.0";
 
-        internal static CreaturesStarsWatcher Instance { get; private set; }
+        internal static CreatureStarAlert Instance { get; private set; }
 
         /// <summary>Entry point used by the Harmony patches to report new star creatures.</summary>
         internal IAlertManager AlertManager { get; private set; }

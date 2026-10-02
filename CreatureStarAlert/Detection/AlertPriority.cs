@@ -1,4 +1,4 @@
-namespace CreaturesStarsWatcher.Detection
+namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Ranks the detected creatures for a same alert. The active criterion comes first
