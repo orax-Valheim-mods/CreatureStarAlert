@@ -41,6 +41,7 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Alert | Position | `TopCenter` | `TopCenter`, `Center` or `BottomCenter`. |
 | Alert | ShowDistance | `true` | Show the live distance in the banner. |
 | Alert | MaxQueuedAlerts | `3` | Maximum number of alerts waiting to be displayed, closest first. |
+| Alert | FontSize | `0` | Font size in pixels, `0` = automatic (scaled to the screen height). |
 
 # Installation
 
