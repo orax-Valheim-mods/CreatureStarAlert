@@ -14,6 +14,8 @@ with **n stars** appears near the player, so a two star moose never goes unnotic
 - Anti-spam: one alert per creature plus a global cooldown.
 - The banner shows the localised name, the stars and the live distance, and
   disappears as soon as the creature is unloaded or dead.
+- The closest detected creature wins the banner: a nearer one takes it over, and only
+  the closest alerts are kept waiting behind it.
 
 Client-side only: you do not need to install it on the server.
 

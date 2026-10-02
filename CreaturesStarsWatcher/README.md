@@ -16,6 +16,8 @@ you, so you never miss a two star moose (or any other creature you configure).
   creature name, its stars and the live distance.
 - The banner disappears as soon as the creature is unloaded (zone change) or
   dead, and shows up again when its zone is loaded anew.
+- The closest detected creature wins the banner: loaded zones are scanned nearest
+  first, and a nearer creature takes the banner over.
 
 This mod is client-side only: you do not need to install it on the server.
 
@@ -38,7 +40,7 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Alert | DurationSeconds | `6` | How long the banner stays on screen. |
 | Alert | Position | `TopCenter` | `TopCenter`, `Center` or `BottomCenter`. |
 | Alert | ShowDistance | `true` | Show the live distance in the banner. |
-| Alert | MaxQueuedAlerts | `3` | Maximum number of alerts waiting to be displayed. |
+| Alert | MaxQueuedAlerts | `3` | Maximum number of alerts waiting to be displayed, closest first. |
 
 # Installation
 
