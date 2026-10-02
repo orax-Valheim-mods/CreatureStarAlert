@@ -47,6 +47,9 @@ namespace CreaturesStarsWatcher.Detection
         /// <summary>The creature itself. Becomes Unity-null once the creature is destroyed.</summary>
         public Character Character { get; }
 
+        /// <summary>False once the creature has been destroyed or unloaded.</summary>
+        public bool IsAvailable => Character != null;
+
         /// <summary>Position of the creature when the alert was raised (fallback once destroyed).</summary>
         public Vector3 Position { get; }
 

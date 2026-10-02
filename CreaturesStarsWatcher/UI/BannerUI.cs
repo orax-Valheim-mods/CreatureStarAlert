@@ -72,6 +72,13 @@ namespace CreaturesStarsWatcher.UI
                 return;
             }
 
+            // The creature was unloaded or destroyed: its alert must leave the screen.
+            if (_current != null && !_current.IsAvailable)
+            {
+                _current = null;
+                _elapsed = 0f;
+            }
+
             float duration = GetDuration();
             if (_current != null)
             {
@@ -83,10 +90,26 @@ namespace CreaturesStarsWatcher.UI
                 }
             }
 
-            if (_current == null && _queue.Count > 0)
+            if (_current == null)
             {
-                _current = _queue.Dequeue();
+                DequeueNext();
+            }
+        }
+
+        /// <summary>Shows the next alert whose creature is still loaded.</summary>
+        private void DequeueNext()
+        {
+            while (_queue.Count > 0)
+            {
+                CreatureAlert next = _queue.Dequeue();
+                if (!next.IsAvailable)
+                {
+                    continue;
+                }
+
+                _current = next;
                 _elapsed = 0f;
+                return;
             }
         }
 
@@ -133,7 +156,7 @@ namespace CreaturesStarsWatcher.UI
                 $"<color={NameColor}>{name}</color>  <color={StarColor}>{new string('★', stars)}</color>";
 
             // The distance is only meaningful while the creature still exists.
-            if (_config.ShowDistance && alert.Character != null)
+            if (_config.ShowDistance && alert.IsAvailable)
             {
                 float distance = Vector3.Distance(
                     player.transform.position,
