@@ -12,12 +12,14 @@ you, so you never miss a two star moose (or any other creature you configure).
   settings), so the setting is capped at 500 m instead of pretending to be unlimited.
 - Covers fresh spawns (spawn system, spawners, births, summons) **and** creatures
   already present when you enter or load a zone.
-- One alert per creature, with a cooldown, shown as a fading banner with the
-  creature name, its stars and the live distance.
+- One alert per creature, with a cooldown that a creature winning on the selection
+  criterion may break, shown as a fading banner with the creature name, its stars
+  and the live distance.
 - The banner disappears as soon as the creature is unloaded (zone change) or
   dead, and shows up again when its zone is loaded anew.
-- The closest detected creature wins the banner: loaded zones are scanned nearest
-  first, and a nearer creature takes the banner over.
+- The closest detected creature wins the banner: loaded zones are scanned best
+  first, and a nearer creature takes the banner over. With `Alert.PreferMostStars`,
+  the creature with the most stars wins instead, ties being broken by distance.
 
 This mod is client-side only: you do not need to install it on the server.
 
@@ -35,13 +37,14 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | MaxDistance | `100` | Maximum distance in metres (capped at 500), `0` = no distance filter. |
 | Detection | IncludeLoadedCreatures | `true` | Also alert for creatures found when entering a zone. |
 | Detection | ReAlertOnZoneLoad | `true` | Alert again when a zone is loaded with the same creature. |
-| Detection | CooldownSeconds | `10` | Minimum delay between two alerts; a nearer creature is not held back. |
+| Detection | CooldownSeconds | `10` | Minimum delay between two alerts; a creature winning on the criterion is not held back. |
 | Detection | ScanIntervalSeconds | `1` | How often loaded zones are scanned. |
 | Alert | DurationSeconds | `6` | How long the banner stays on screen. |
 | Alert | Position | `TopCenter` | `TopCenter`, `Center` or `BottomCenter`. |
 | Alert | ShowDistance | `true` | Show the live distance in the banner. |
-| Alert | MaxQueuedAlerts | `3` | Maximum number of alerts waiting to be displayed, closest first. |
+| Alert | MaxQueuedAlerts | `3` | Maximum number of alerts waiting to be displayed, best first. |
 | Alert | FontSize | `0` | Font size in pixels, `0` = automatic (scaled to the screen height). |
+| Alert | PreferMostStars | `false` | With several creatures, show the one with the most stars instead of the closest. |
 
 # Installation
 
