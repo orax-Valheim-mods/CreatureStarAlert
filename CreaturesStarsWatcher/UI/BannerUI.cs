@@ -8,9 +8,10 @@ using UnityEngine;
 namespace CreaturesStarsWatcher.UI
 {
     /// <summary>
-    /// Screens one alert at a time behind a fading banner and keeps the closest
-    /// detected creature on screen: the pending alerts are picked by distance and a
-    /// clearly nearer creature takes the banner over. It only depends on
+    /// Screens one alert at a time behind a fading banner and keeps the winning
+    /// creature on screen: the pending alerts are picked on the selection criterion
+    /// (most stars or nearest) and a pending creature takes the banner over as soon
+    /// as it beats the one displayed. It only depends on
     /// <see cref="IBannerConfig"/>, everything it needs to draw is carried by the
     /// <see cref="CreatureAlert"/> itself.
     /// </summary>
@@ -56,13 +57,10 @@ namespace CreaturesStarsWatcher.UI
             ForgetUnavailable();
             if (_pending.Count >= _config.MaxQueuedAlerts)
             {
-                // Only the closest creatures are worth a slot: a nearer newcomer takes
-                // the place of the farthest pending alert instead of being dropped.
-                int farthest = FindFarthest(player);
-                if (
-                    farthest < 0
-                    || DistanceOf(alert, player) >= DistanceOf(_pending[farthest], player)
-                )
+                // Only the winning creatures are worth a slot: a better newcomer takes
+                // the place of the worst pending alert instead of being dropped.
+                int worst = FindWorst(player);
+                if (worst < 0 || !Ranks(alert, _pending[worst], player))
                 {
                     _logger.LogDebug(
                         $"[StarsWatcher] Banner queue is full, dropping {alert.DisplayName}"
@@ -70,7 +68,7 @@ namespace CreaturesStarsWatcher.UI
                     return;
                 }
 
-                _pending.RemoveAt(farthest);
+                _pending.RemoveAt(worst);
             }
 
             _pending.Add(alert);
@@ -110,42 +108,33 @@ namespace CreaturesStarsWatcher.UI
                 }
             }
 
-            ShowClosest();
+            ShowBest();
         }
 
         /// <summary>
-        /// Keeps the closest detected creature on screen: promotes the nearest pending
-        /// alert when the banner is free and swaps for a pending one as soon as it is
-        /// clearly nearer than the creature displayed.
+        /// Keeps the winning creature on screen: promotes the best pending alert when
+        /// the banner is free and swaps for a pending one as soon as it beats the
+        /// creature displayed (more stars with the option, clearly nearer otherwise).
         /// </summary>
-        private void ShowClosest()
+        private void ShowBest()
         {
             Player player = Player.m_localPlayer;
             ForgetUnavailable();
 
-            int closest = FindClosest(player);
+            int best = FindBest(player);
             if (_current == null)
             {
-                Promote(closest);
+                Promote(best);
                 return;
             }
 
-            if (closest < 0)
-            {
-                return;
-            }
-
-            // The margin keeps two creatures of a herd from fighting over the banner.
-            if (
-                DistanceOf(_pending[closest], player) + PreemptionMargin
-                >= DistanceOf(_current, player)
-            )
+            if (best < 0 || !Beats(_pending[best], _current, player))
             {
                 return;
             }
 
             CreatureAlert previous = _current;
-            if (Promote(closest))
+            if (Promote(best))
             {
                 _pending.Add(previous);
             }
@@ -166,38 +155,59 @@ namespace CreaturesStarsWatcher.UI
             return true;
         }
 
-        private int FindClosest(Player player)
+        private int FindBest(Player player)
         {
-            int closest = -1;
+            int best = -1;
             for (int i = 0; i < _pending.Count; i++)
             {
-                if (
-                    closest < 0
-                    || DistanceOf(_pending[i], player) < DistanceOf(_pending[closest], player)
-                )
+                if (best < 0 || Ranks(_pending[i], _pending[best], player))
                 {
-                    closest = i;
+                    best = i;
                 }
             }
 
-            return closest;
+            return best;
         }
 
-        private int FindFarthest(Player player)
+        private int FindWorst(Player player)
         {
-            int farthest = -1;
+            int worst = -1;
             for (int i = 0; i < _pending.Count; i++)
             {
-                if (
-                    farthest < 0
-                    || DistanceOf(_pending[i], player) > DistanceOf(_pending[farthest], player)
-                )
+                if (worst < 0 || Ranks(_pending[worst], _pending[i], player))
                 {
-                    farthest = i;
+                    worst = i;
                 }
             }
 
-            return farthest;
+            return worst;
+        }
+
+        /// <summary>Whether the left alert ranks before the right one on the criterion.</summary>
+        private bool Ranks(CreatureAlert left, CreatureAlert right, Player player)
+        {
+            return AlertPriority.Compare(
+                    left.Stars,
+                    DistanceOf(left, player),
+                    right.Stars,
+                    DistanceOf(right, player),
+                    _config.PreferMostStars
+                ) < 0;
+        }
+
+        /// <summary>
+        /// Whether the candidate takes the banner from the creature displayed: more stars
+        /// with the option, and at least <see cref="PreemptionMargin"/> metres nearer
+        /// otherwise, so a herd cannot make the banner flicker.
+        /// </summary>
+        private bool Beats(CreatureAlert candidate, CreatureAlert current, Player player)
+        {
+            if (_config.PreferMostStars)
+            {
+                return candidate.Stars > current.Stars;
+            }
+
+            return DistanceOf(candidate, player) + PreemptionMargin < DistanceOf(current, player);
         }
 
         private void ForgetUnavailable()
