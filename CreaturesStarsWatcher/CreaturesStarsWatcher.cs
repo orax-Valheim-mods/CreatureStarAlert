@@ -44,7 +44,8 @@ namespace CreaturesStarsWatcher
 
             Logger.LogInfo(
                 $"{PluginName} {PluginVersion} loaded: stars >= {config.StarsMinimum}, "
-                    + $"creatures '{config.CreaturePatterns}', radius {config.MaxDistance} m"
+                    + $"creatures '{config.CreaturePatterns}', radius "
+                    + (config.MaxDistance > 0f ? $"{config.MaxDistance} m" : "no filter")
             );
         }
 

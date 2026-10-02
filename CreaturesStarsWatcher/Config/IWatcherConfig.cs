@@ -16,7 +16,11 @@ namespace CreaturesStarsWatcher.Config
         /// <summary>Minimum number of stars required to raise an alert. Comparison is "greater than or equal".</summary>
         int StarsMinimum { get; }
 
-        /// <summary>Maximum distance in metres between the local player and the creature. 0 disables the check.</summary>
+        /// <summary>
+        /// Maximum distance in metres between the local player and the creature. 0 disables the check:
+        /// every loaded creature is considered. The game unloads zones beyond its simulation distance,
+        /// so a creature is never instantiated farther than a few hundred metres.
+        /// </summary>
         float MaxDistance { get; }
 
         /// <summary>Whether creatures already present when a zone is loaded or entered are considered.</summary>

@@ -17,6 +17,14 @@ namespace CreaturesStarsWatcher.Config
         private const string PositionCenter = "Center";
         private const string PositionBottomCenter = "BottomCenter";
 
+        /// <summary>
+        /// Upper bound of the MaxDistance setting. The game unloads zones beyond its simulation
+        /// distance (2 zones of 64 m with the default settings, 5 zones at most), so a creature is
+        /// never instantiated farther than a few hundred metres: asking for more would be the same
+        /// as 0.
+        /// </summary>
+        private const float MaxLoadedCreatureDistance = 500f;
+
         private readonly ConfigEntry<bool> _enabled;
         private readonly ConfigEntry<bool> _debugLogging;
         private readonly ConfigEntry<int> _starsMinimum;
@@ -71,8 +79,12 @@ namespace CreaturesStarsWatcher.Config
                 nameof(MaxDistance),
                 100f,
                 new ConfigDescription(
-                    "Maximum distance in metres between the player and the creature. 0 = unlimited.",
-                    new AcceptableValueRange<float>(0f, 2000f)
+                    "Maximum distance in metres between the player and the creature for an alert. "
+                        + "0 = no distance filter: every creature the game has loaded is considered. "
+                        + "The game unloads zones and their creatures beyond its simulation distance "
+                        + "(about 200 m with the default settings), so the setting stops at 500 m: "
+                        + "a larger value could never make a difference.",
+                    new AcceptableValueRange<float>(0f, MaxLoadedCreatureDistance)
                 )
             );
 
