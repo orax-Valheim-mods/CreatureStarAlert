@@ -1,3 +1,4 @@
+using System.Text;
 using BepInEx.Configuration;
 
 namespace CreaturesStarsWatcher.Config
@@ -43,21 +44,24 @@ namespace CreaturesStarsWatcher.Config
 
         public PluginConfig(ConfigFile file)
         {
-            _enabled = file.Bind(
+            _enabled = Bind(
+                file,
                 GeneralSection,
                 nameof(Enabled),
                 true,
                 "Enable the creature star alerts."
             );
 
-            _debugLogging = file.Bind(
+            _debugLogging = Bind(
+                file,
                 GeneralSection,
                 nameof(DebugLogging),
                 false,
                 "Log every detection decision. Verbose, intended for troubleshooting only."
             );
 
-            _starsMinimum = file.Bind(
+            _starsMinimum = Bind(
+                file,
                 DetectionSection,
                 nameof(StarsMinimum),
                 2,
@@ -67,7 +71,8 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _creaturePatterns = file.Bind(
+            _creaturePatterns = Bind(
+                file,
                 DetectionSection,
                 nameof(CreaturePatterns),
                 "*",
@@ -76,7 +81,8 @@ namespace CreaturesStarsWatcher.Config
                     + "'*' watches every creature."
             );
 
-            _maxDistance = file.Bind(
+            _maxDistance = Bind(
+                file,
                 DetectionSection,
                 nameof(MaxDistance),
                 100f,
@@ -90,14 +96,16 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _includeLoadedCreatures = file.Bind(
+            _includeLoadedCreatures = Bind(
+                file,
                 DetectionSection,
                 nameof(IncludeLoadedCreatures),
                 true,
                 "Also alert for star creatures found when entering or loading a zone, not only on fresh spawns."
             );
 
-            _reAlertOnZoneLoad = file.Bind(
+            _reAlertOnZoneLoad = Bind(
+                file,
                 DetectionSection,
                 nameof(ReAlertOnZoneLoad),
                 true,
@@ -105,7 +113,8 @@ namespace CreaturesStarsWatcher.Config
                     + "When false, each creature is only alerted once per world session."
             );
 
-            _cooldownSeconds = file.Bind(
+            _cooldownSeconds = Bind(
+                file,
                 DetectionSection,
                 nameof(CooldownSeconds),
                 10f,
@@ -116,7 +125,8 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _scanIntervalSeconds = file.Bind(
+            _scanIntervalSeconds = Bind(
+                file,
                 DetectionSection,
                 nameof(ScanIntervalSeconds),
                 1f,
@@ -126,7 +136,8 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _durationSeconds = file.Bind(
+            _durationSeconds = Bind(
+                file,
                 AlertSection,
                 nameof(DurationSeconds),
                 6f,
@@ -136,7 +147,8 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _position = file.Bind(
+            _position = Bind(
+                file,
                 AlertSection,
                 nameof(Position),
                 PositionTopCenter,
@@ -150,14 +162,16 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _showDistance = file.Bind(
+            _showDistance = Bind(
+                file,
                 AlertSection,
                 nameof(ShowDistance),
                 true,
                 "Show the live distance to the creature in the banner."
             );
 
-            _maxQueuedAlerts = file.Bind(
+            _maxQueuedAlerts = Bind(
+                file,
                 AlertSection,
                 nameof(MaxQueuedAlerts),
                 3,
@@ -168,7 +182,8 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _fontSize = file.Bind(
+            _fontSize = Bind(
+                file,
                 AlertSection,
                 nameof(FontSize),
                 0,
@@ -179,7 +194,8 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
-            _preferMostStars = file.Bind(
+            _preferMostStars = Bind(
+                file,
                 AlertSection,
                 nameof(PreferMostStars),
                 false,
@@ -217,6 +233,63 @@ namespace CreaturesStarsWatcher.Config
         public int FontSize => _fontSize.Value;
 
         public bool PreferMostStars => _preferMostStars.Value;
+
+        /// <summary>
+        /// Binds a setting under its readable key: the identifier given with nameof
+        /// is turned into spaces and a single leading capital, so "DurationSeconds"
+        /// is stored and displayed as "Duration seconds".
+        /// </summary>
+        private static ConfigEntry<T> Bind<T>(
+            ConfigFile file,
+            string section,
+            string identifier,
+            T defaultValue,
+            string description
+        )
+        {
+            return Bind(
+                file,
+                section,
+                identifier,
+                defaultValue,
+                new ConfigDescription(description)
+            );
+        }
+
+        private static ConfigEntry<T> Bind<T>(
+            ConfigFile file,
+            string section,
+            string identifier,
+            T defaultValue,
+            ConfigDescription description
+        )
+        {
+            return file.Bind(section, ReadableKey(identifier), defaultValue, description);
+        }
+
+        /// <summary>"DurationSeconds" becomes "Duration seconds".</summary>
+        private static string ReadableKey(string identifier)
+        {
+            if (string.IsNullOrEmpty(identifier))
+            {
+                return identifier;
+            }
+
+            StringBuilder key = new StringBuilder(identifier.Length + 4);
+            key.Append(char.ToUpperInvariant(identifier[0]));
+            for (int i = 1; i < identifier.Length; i++)
+            {
+                char character = identifier[i];
+                if (char.IsUpper(character))
+                {
+                    key.Append(' ');
+                }
+
+                key.Append(char.ToLowerInvariant(character));
+            }
+
+            return key.ToString();
+        }
 
         private static BannerPosition ParsePosition(string value)
         {
