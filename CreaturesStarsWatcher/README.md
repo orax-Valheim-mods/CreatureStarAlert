@@ -42,7 +42,9 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | Cooldown seconds | `10` | Minimum delay between two alerts; a creature winning on the criterion is not held back. |
 | Detection | Scan interval seconds | `1` | How often loaded zones are scanned. |
 | Alert | Duration seconds | `6` | How long the banner stays on screen; `0` = until the creature is unloaded or dies. |
-| Alert | Position | `TopCenter` | Nine grid positions: `TopLeft`, `TopCenter`, `TopRight`, `Left`, `Center`, `Right`, `BottomLeft`, `BottomCenter`, `BottomRight`. |
+| Alert | Anchor | `TopCenter` | Point of the banner placed at the position: `TopLeft`, `TopCenter`, `TopRight`, `Left`, `Center`, `Right`, `BottomLeft`, `BottomCenter`, `BottomRight`. |
+| Alert | Position x | `50` | Horizontal position of the anchor, in percent of the screen width (`0` = left edge, `100` = right edge). |
+| Alert | Position y | `18` | Vertical position of the anchor, in percent of the screen height (`0` = top edge, `100` = bottom edge). |
 | Alert | Show distance | `true` | Show the live distance in the banner. |
 | Alert | Max queued alerts | `3` | Maximum number of alerts waiting to be displayed, best first. |
 | Alert | Font size | `0` | Font size in pixels, `0` = automatic (scaled to the screen height). |
