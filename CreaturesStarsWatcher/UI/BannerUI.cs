@@ -33,10 +33,6 @@ namespace CreaturesStarsWatcher.UI
         /// <summary>Share of the displayed distance the candidate must win by, up to <see cref="MaxLead"/>.</summary>
         private const float LeadRatio = 0.25f;
 
-        private const string NameColor = "#FFFFFF";
-        private const string StarColor = "#FFC53B";
-        private const string DistanceColor = "#A8A8A8";
-
         private readonly IBannerConfig _config;
         private readonly ManualLogSource _logger;
         private readonly List<CreatureAlert> _pending = new List<CreatureAlert>();
@@ -285,8 +281,12 @@ namespace CreaturesStarsWatcher.UI
             Vector2 origin = GetOrigin(width, height);
 
             Color previousColor = GUI.color;
-            GUI.color = new Color(0f, 0f, 0f, 0.65f * alpha);
-            GUI.Box(new Rect(origin.x, origin.y, width, height), GUIContent.none);
+            if (_config.ShowRectangle)
+            {
+                GUI.color = new Color(0f, 0f, 0f, _config.RectangleOpacity / 100f * alpha);
+                GUI.Box(new Rect(origin.x, origin.y, width, height), GUIContent.none);
+            }
+
             GUI.color = new Color(1f, 1f, 1f, alpha);
             GUI.Label(new Rect(origin.x, origin.y, width, height), text, style);
             GUI.color = previousColor;
@@ -300,7 +300,8 @@ namespace CreaturesStarsWatcher.UI
             // Bounded like the StarsMinimum setting, which accepts up to 9 stars.
             int stars = Mathf.Clamp(alert.Stars, 1, 9);
             string text =
-                $"<color={NameColor}>{name}</color>  <color={StarColor}>{new string('★', stars)}</color>";
+                $"<color={ToHex(_config.NameColor)}>{name}</color>"
+                + $"  <color={ToHex(_config.StarColor)}>{new string('★', stars)}</color>";
 
             // The distance is only meaningful while the creature still exists.
             if (_config.ShowDistance && alert.IsAvailable)
@@ -309,10 +310,19 @@ namespace CreaturesStarsWatcher.UI
                     player.transform.position,
                     alert.Character.transform.position
                 );
-                text += $"  <color={DistanceColor}>({distance:0} m)</color>";
+                text += $"  <color={ToHex(_config.DistanceColor)}>({distance:0} m)</color>";
             }
 
             return text;
+        }
+
+        /// <summary>
+        /// Colour the way the rich text tag wants it: a leading '#' followed by RRGGBBAA,
+        /// so the alpha of the configured colour fades its text along with the banner.
+        /// </summary>
+        private static string ToHex(Color color)
+        {
+            return "#" + ColorUtility.ToHtmlStringRGBA(color);
         }
 
         /// <summary>Configured font size, or a screen-proportional one when set to automatic.</summary>
