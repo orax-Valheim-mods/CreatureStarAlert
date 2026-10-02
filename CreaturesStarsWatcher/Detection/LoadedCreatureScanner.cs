@@ -1,21 +1,28 @@
 using System;
 using System.Collections.Generic;
 using CreaturesStarsWatcher.Config;
+using UnityEngine;
 
 namespace CreaturesStarsWatcher.Detection
 {
     /// <summary>
     /// Scans the creatures currently loaded around the player and reports the watched
-    /// ones. Every loaded creature is evaluated on each scan; the manager owns the
-    /// anti-spam rules, this class only owns the "what is loaded right now" view and
-    /// forgets the creatures that are not instantiated anymore, so that loading a zone
-    /// again raises a new alert.
+    /// ones, closest first: the manager only lets one alert through per cooldown, so
+    /// the reporting order decides which creature the player is warned about first.
+    /// Every loaded creature is evaluated on each scan; the manager owns the anti-spam
+    /// rules, this class only owns the "what is loaded right now" view and forgets the
+    /// creatures that are not instantiated anymore, so that loading a zone again raises
+    /// a new alert.
     /// </summary>
     public sealed class LoadedCreatureScanner
     {
+        private static readonly Comparison<Character> ClosestFirst = (left, right) =>
+            DistanceToPlayer(left).CompareTo(DistanceToPlayer(right));
+
         private readonly IDetectionConfig _config;
         private readonly IAlertManager _manager;
         private readonly HashSet<ZDOID> _loadedIds = new HashSet<ZDOID>();
+        private readonly List<Character> _byDistance = new List<Character>();
 
         private float _accumulator;
 
@@ -29,6 +36,7 @@ namespace CreaturesStarsWatcher.Detection
         public void Reset()
         {
             _loadedIds.Clear();
+            _byDistance.Clear();
             _accumulator = 0f;
         }
 
@@ -47,6 +55,7 @@ namespace CreaturesStarsWatcher.Detection
         private void Scan()
         {
             _loadedIds.Clear();
+            _byDistance.Clear();
             foreach (Character character in Character.GetAllCharacters())
             {
                 if (character == null)
@@ -64,8 +73,16 @@ namespace CreaturesStarsWatcher.Detection
 
                 if (_config.IncludeLoadedCreatures)
                 {
-                    _manager.Report(character, AlertReason.Loaded);
+                    _byDistance.Add(character);
                 }
+            }
+
+            // Nearest first: a herd then warns about its closest member instead of
+            // whichever creature the game happened to enumerate first.
+            _byDistance.Sort(ClosestFirst);
+            foreach (Character character in _byDistance)
+            {
+                _manager.Report(character, AlertReason.Loaded);
             }
 
             // Creatures that unloaded are forgotten, so loading them again alerts.
@@ -73,6 +90,17 @@ namespace CreaturesStarsWatcher.Detection
             {
                 _manager.ForgetUnavailable(_loadedIds);
             }
+        }
+
+        private static float DistanceToPlayer(Character character)
+        {
+            Player player = Player.m_localPlayer;
+            if (player == null)
+            {
+                return float.MaxValue;
+            }
+
+            return Vector3.Distance(player.transform.position, character.transform.position);
         }
     }
 }
