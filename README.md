@@ -7,7 +7,8 @@ with **n stars** appears near the player, so a two star moose never goes unnotic
 
 - Alerts when a creature with `n` stars or more appears (`n` is configurable, default 2).
 - The creatures to watch are configurable: a comma separated list with `*` wildcard.
-- Configurable detection radius (default 100 m, `0` = unlimited).
+- Configurable detection radius (default 100 m, `0` = no distance filter: the game itself unloads
+  zones and their creatures beyond its simulation distance, about 200 m with the default settings).
 - Covers fresh spawns (spawn system, spawners, births, summons) **and** creatures
   already present when you enter or load a zone.
 - Anti-spam: one alert per creature plus a global cooldown.
