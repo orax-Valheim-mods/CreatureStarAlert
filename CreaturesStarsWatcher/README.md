@@ -15,6 +15,9 @@ you, so you never miss a two star moose (or any other creature you configure).
 - One alert per creature, with a cooldown that a creature winning on the selection
   criterion may break, shown as a fading banner with the creature name, its stars
   and the live distance.
+- The banner look is configurable: the colours of the name, the stars and the
+  distance, the rectangle behind the text (shown by default, with its own opacity),
+  its position, its font size and how long it stays.
 - The banner disappears as soon as the creature is unloaded (zone change) or
   dead, and shows up again when its zone is loaded anew.
 - The closest detected creature wins the banner: loaded zones are scanned best
@@ -46,6 +49,11 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Alert | Position unit | `Percent` | Unit of `Position x` and `Position y`: `Percent` of the screen, or `Pixels` counted from the top left corner. |
 | Alert | Position x | `50` | Horizontal position of the anchor: percent of the screen width (`0` = left edge, `100` = right edge) or pixels from the left edge. |
 | Alert | Position y | `5` | Vertical position of the anchor: percent of the screen height (`0` = top edge, `100` = bottom edge) or pixels from the top edge. |
+| Alert | Name color | `FFFFFFFF` | Colour of the creature name, as a `RRGGBBAA` hex value (no `#`). |
+| Alert | Star color | `FFC53BFF` | Colour of the stars, as a `RRGGBBAA` hex value (no `#`). |
+| Alert | Distance color | `A8A8A8FF` | Colour of the distance, as a `RRGGBBAA` hex value (no `#`). |
+| Alert | Show rectangle | `true` | Draw the rectangle behind the banner text; `false` shows the text alone. |
+| Alert | Rectangle opacity | `65` | Opacity of the rectangle in percent: `0` = invisible, `100` = opaque black. |
 | Alert | Show distance | `true` | Show the live distance in the banner. |
 | Alert | Max queued alerts | `3` | Maximum number of alerts waiting to be displayed, best first. |
 | Alert | Font size | `0` | Font size in pixels, `0` = automatic (scaled to the screen height). |
