@@ -7,8 +7,8 @@ using UnityEngine;
 namespace CreatureStarAlert.Detection
 {
     /// <summary>
-    /// Applies the filters (stars, creature list, distance), the anti-spam rules
-    /// (one alert per creature, cooldown) and forwards the resulting alert to the sink.
+    /// Applies the filters (stars, creature list, distance), the one-alert-per-creature
+    /// anti-spam rule and forwards the resulting alert to the sink.
     /// </summary>
     public sealed class AlertManager : IAlertManager
     {
@@ -20,9 +20,6 @@ namespace CreatureStarAlert.Detection
         private readonly ManualLogSource _logger;
 
         private readonly HashSet<ZDOID> _alerted = new HashSet<ZDOID>();
-        private float _lastAlertTime;
-        private float _lastAlertDistance;
-        private int _lastAlertStars;
 
         public AlertManager(
             IDetectionConfig config,
@@ -67,9 +64,6 @@ namespace CreatureStarAlert.Detection
         public void Reset()
         {
             _alerted.Clear();
-            _lastAlertTime = 0f;
-            _lastAlertDistance = 0f;
-            _lastAlertStars = 0;
         }
 
         public void ForgetUnavailable(IEnumerable<ZDOID> loadedCreatures)
@@ -139,31 +133,7 @@ namespace CreatureStarAlert.Detection
                 return AlertOutcome.NotWatched;
             }
 
-            float now = Time.realtimeSinceStartup;
-            bool coolingDown =
-                _config.CooldownSeconds > 0f && now - _lastAlertTime < _config.CooldownSeconds;
-
-            // A creature that wins on the criterion breaks the cooldown: the one the
-            // banner must show cannot wait behind an alert it outranks, and every
-            // creature is only alerted once anyway.
-            if (
-                coolingDown
-                && AlertPriority.Compare(
-                    stars,
-                    distance,
-                    _lastAlertStars,
-                    _lastAlertDistance,
-                    _config.PreferMostStars
-                ) >= 0
-            )
-            {
-                return AlertOutcome.Cooldown;
-            }
-
             _alerted.Add(id);
-            _lastAlertTime = now;
-            _lastAlertDistance = distance;
-            _lastAlertStars = stars;
             alert = new CreatureAlert(prefabName, displayName, stars, reason, character, distance);
             return AlertOutcome.Alerted;
         }

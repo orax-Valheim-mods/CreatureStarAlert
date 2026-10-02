@@ -3,7 +3,7 @@ namespace CreatureStarAlert.Detection
     /// <summary>
     /// Ranks the detected creatures for a same alert. The active criterion comes first
     /// (the most stars when the option is on, the nearest otherwise) and the distance
-    /// always breaks ties, so the zone scan, the cooldown and the banner all agree on
+    /// always breaks ties, so the zone scan and the banner agree on
     /// which creature the player is shown.
     /// </summary>
     public static class AlertPriority

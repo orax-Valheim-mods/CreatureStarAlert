@@ -18,9 +18,6 @@ namespace CreatureStarAlert.Detection
         /// <summary>An alert was already raised for this creature.</summary>
         AlreadyAlerted,
 
-        /// <summary>A valid alert suppressed by the cooldown. It will be retried later.</summary>
-        Cooldown,
-
         /// <summary>The alert was produced and handed over to the sink.</summary>
         Alerted,
     }

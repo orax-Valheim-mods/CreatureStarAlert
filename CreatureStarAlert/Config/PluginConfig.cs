@@ -49,7 +49,6 @@ namespace CreatureStarAlert.Config
         private readonly ConfigEntry<float> _maxDistance;
         private readonly ConfigEntry<bool> _includeLoadedCreatures;
         private readonly ConfigEntry<bool> _reAlertOnZoneLoad;
-        private readonly ConfigEntry<float> _cooldownSeconds;
         private readonly ConfigEntry<float> _scanIntervalSeconds;
         private readonly ConfigEntry<float> _durationSeconds;
         private readonly ConfigEntry<string> _anchor;
@@ -135,18 +134,6 @@ namespace CreatureStarAlert.Config
                 true,
                 "Forget the alert of a creature when it unloads, so loading its zone again raises a new alert. "
                     + "When false, each creature is only alerted once per world session."
-            );
-
-            _cooldownSeconds = Bind(
-                file,
-                DetectionSection,
-                nameof(CooldownSeconds),
-                10f,
-                new ConfigDescription(
-                    "Minimum delay in seconds between two alerts. A nearer creature is not "
-                        + "held back. 0 = no delay.",
-                    new AcceptableValueRange<float>(0f, 300f)
-                )
             );
 
             _scanIntervalSeconds = Bind(
@@ -330,8 +317,6 @@ namespace CreatureStarAlert.Config
         public bool IncludeLoadedCreatures => _includeLoadedCreatures.Value;
 
         public bool ReAlertOnZoneLoad => _reAlertOnZoneLoad.Value;
-
-        public float CooldownSeconds => _cooldownSeconds.Value;
 
         public float ScanIntervalSeconds => _scanIntervalSeconds.Value;
 

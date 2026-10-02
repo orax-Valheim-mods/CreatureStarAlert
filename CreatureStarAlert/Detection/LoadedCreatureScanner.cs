@@ -7,8 +7,7 @@ namespace CreatureStarAlert.Detection
 {
     /// <summary>
     /// Scans the creatures currently loaded around the player and reports the watched
-    /// ones, best first: the manager only lets one alert through per cooldown, so the
-    /// reporting order decides which creature the player is warned about first. Every
+    /// ones, best first, so the most interesting creatures are alerted first. Every
     /// loaded creature is evaluated on each scan; the manager owns the anti-spam rules,
     /// this class only owns the "what is loaded right now" view and forgets the
     /// creatures that are not instantiated anymore, so that loading a zone again raises

@@ -44,13 +44,6 @@ namespace CreatureStarAlert.Config
         /// </summary>
         bool ReAlertOnZoneLoad { get; }
 
-        /// <summary>
-        /// Minimum delay in seconds between two alerts. A creature that wins on the
-        /// selection criterion is not held back.
-        /// 0 disables the cooldown.
-        /// </summary>
-        float CooldownSeconds { get; }
-
         /// <summary>How often, in seconds, loaded zones are scanned for star creatures.</summary>
         float ScanIntervalSeconds { get; }
     }
