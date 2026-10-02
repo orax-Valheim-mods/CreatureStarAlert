@@ -1,5 +1,6 @@
 using System.Text;
 using BepInEx.Configuration;
+using UnityEngine;
 
 namespace CreaturesStarsWatcher.Config
 {
@@ -55,6 +56,11 @@ namespace CreaturesStarsWatcher.Config
         private readonly ConfigEntry<int> _positionX;
         private readonly ConfigEntry<int> _positionY;
         private readonly ConfigEntry<string> _positionUnit;
+        private readonly ConfigEntry<Color> _nameColor;
+        private readonly ConfigEntry<Color> _starColor;
+        private readonly ConfigEntry<Color> _distanceColor;
+        private readonly ConfigEntry<bool> _showRectangle;
+        private readonly ConfigEntry<int> _rectangleOpacity;
         private readonly ConfigEntry<bool> _showDistance;
         private readonly ConfigEntry<int> _maxQueuedAlerts;
         private readonly ConfigEntry<int> _fontSize;
@@ -225,6 +231,50 @@ namespace CreaturesStarsWatcher.Config
                 )
             );
 
+            _nameColor = Bind(
+                file,
+                AlertSection,
+                nameof(NameColor),
+                (Color)new Color32(255, 255, 255, 255),
+                "Colour of the creature name, as a RRGGBBAA hex value (FFFFFFFF = opaque white)."
+            );
+
+            _starColor = Bind(
+                file,
+                AlertSection,
+                nameof(StarColor),
+                (Color)new Color32(255, 197, 59, 255),
+                "Colour of the stars, as a RRGGBBAA hex value (FFC53BFF = the default gold)."
+            );
+
+            _distanceColor = Bind(
+                file,
+                AlertSection,
+                nameof(DistanceColor),
+                (Color)new Color32(168, 168, 168, 255),
+                "Colour of the distance, as a RRGGBBAA hex value (A8A8A8FF = light grey)."
+            );
+
+            _showRectangle = Bind(
+                file,
+                AlertSection,
+                nameof(ShowRectangle),
+                true,
+                "Draw the rectangle behind the banner text. When off, only the text is shown."
+            );
+
+            _rectangleOpacity = Bind(
+                file,
+                AlertSection,
+                nameof(RectangleOpacity),
+                65,
+                new ConfigDescription(
+                    "Opacity of the rectangle behind the banner text, in percent: "
+                        + "0 = invisible, 100 = opaque black. Applied on top of the fade.",
+                    new AcceptableValueRange<int>(0, 100)
+                )
+            );
+
             _showDistance = Bind(
                 file,
                 AlertSection,
@@ -296,6 +346,16 @@ namespace CreaturesStarsWatcher.Config
         public PositionUnit PositionUnit => ParseUnit(_positionUnit.Value);
 
         public bool ShowDistance => _showDistance.Value;
+
+        public Color NameColor => _nameColor.Value;
+
+        public Color StarColor => _starColor.Value;
+
+        public Color DistanceColor => _distanceColor.Value;
+
+        public bool ShowRectangle => _showRectangle.Value;
+
+        public int RectangleOpacity => _rectangleOpacity.Value;
 
         public int MaxQueuedAlerts => _maxQueuedAlerts.Value;
 

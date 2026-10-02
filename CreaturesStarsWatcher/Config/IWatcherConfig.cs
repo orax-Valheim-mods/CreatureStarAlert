@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace CreaturesStarsWatcher.Config
 {
     /// <summary>Criterion deciding which creature a multi creature alert is about.</summary>
@@ -83,6 +85,21 @@ namespace CreaturesStarsWatcher.Config
 
         /// <summary>Whether the live distance to the creature is displayed.</summary>
         bool ShowDistance { get; }
+
+        /// <summary>Colour of the creature name in the banner text.</summary>
+        Color NameColor { get; }
+
+        /// <summary>Colour of the stars in the banner text.</summary>
+        Color StarColor { get; }
+
+        /// <summary>Colour of the distance in the banner text.</summary>
+        Color DistanceColor { get; }
+
+        /// <summary>Whether the rectangle behind the banner text is drawn.</summary>
+        bool ShowRectangle { get; }
+
+        /// <summary>Opacity of the rectangle behind the text, in percent (0 = invisible, 100 = opaque).</summary>
+        int RectangleOpacity { get; }
 
         /// <summary>Maximum number of alerts waiting to be displayed. The best ones on the criterion are kept.</summary>
         int MaxQueuedAlerts { get; }
