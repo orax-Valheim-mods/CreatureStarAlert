@@ -12,8 +12,7 @@ you, so you never miss a two star moose (or any other creature you configure).
   settings), so the setting is capped at 500 m instead of pretending to be unlimited.
 - Covers fresh spawns (spawn system, spawners, births, summons) **and** creatures
   already present when you enter or load a zone.
-- One alert per creature, with a cooldown that a creature winning on the selection
-  criterion may break, shown as a fading banner with the creature name, its stars
+- One alert per creature, shown as a fading banner with the creature name, its stars
   and the live distance.
 - The banner look is configurable: the colours of the name, the stars and the
   distance, the rectangle behind the text (shown by default, with its own opacity),
@@ -42,7 +41,6 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | Detection | Max distance | `100` | Maximum distance in metres (capped at 500), `0` = no distance filter. |
 | Detection | Include loaded creatures | `true` | Also alert for creatures found when entering a zone. |
 | Detection | Re alert on zone load | `true` | Alert again when a zone is loaded with the same creature. |
-| Detection | Cooldown seconds | `10` | Minimum delay between two alerts; a creature winning on the criterion is not held back. |
 | Detection | Scan interval seconds | `3` | How often loaded zones are scanned. |
 | Alert | Duration seconds | `6` | How long the banner stays on screen; `0` = until the creature is unloaded or dies. |
 | Alert | Anchor | `Center` | Point of the banner placed at the position: `TopLeft`, `TopCenter`, `TopRight`, `Left`, `Center`, `Right`, `BottomLeft`, `BottomCenter`, `BottomRight`. Changing it barely moves the banner: change `Position x` and `Position y` to move the banner on screen. |
