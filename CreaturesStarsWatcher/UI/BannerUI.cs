@@ -24,8 +24,14 @@ namespace CreaturesStarsWatcher.UI
         /// <summary>Screen height share used by the automatic font size.</summary>
         private const float ScreenHeightRatio = 0.035f;
 
-        /// <summary>Metres a pending creature must win by to take the banner over.</summary>
-        private const float PreemptionMargin = 5f;
+        /// <summary>Largest lead in metres a pending creature must win by to take the banner over.</summary>
+        private const float MaxLead = 5f;
+
+        /// <summary>Smallest lead at close range, so idle animations cannot flicker the banner.</summary>
+        private const float MinLead = 0.5f;
+
+        /// <summary>Share of the displayed distance the candidate must win by, up to <see cref="MaxLead"/>.</summary>
+        private const float LeadRatio = 0.25f;
 
         private const string NameColor = "#FFFFFF";
         private const string StarColor = "#FFC53B";
@@ -197,17 +203,31 @@ namespace CreaturesStarsWatcher.UI
 
         /// <summary>
         /// Whether the candidate takes the banner from the creature displayed: more stars
-        /// with the option, and at least <see cref="PreemptionMargin"/> metres nearer
-        /// otherwise, so a herd cannot make the banner flicker.
+        /// always win with the option, otherwise (and on equal stars) the candidate must
+        /// lead by <see cref="RequiredLead"/> metres, which keeps a herd from making the
+        /// banner flicker while still letting you switch it by stepping up to a creature.
         /// </summary>
         private bool Beats(CreatureAlert candidate, CreatureAlert current, Player player)
         {
-            if (_config.PreferMostStars)
+            if (_config.PreferMostStars && candidate.Stars != current.Stars)
             {
                 return candidate.Stars > current.Stars;
             }
 
-            return DistanceOf(candidate, player) + PreemptionMargin < DistanceOf(current, player);
+            float candidateDistance = DistanceOf(candidate, player);
+            float currentDistance = DistanceOf(current, player);
+            return candidateDistance + RequiredLead(currentDistance) < currentDistance;
+        }
+
+        /// <summary>
+        /// Metres the candidate must win by: a quarter of the displayed distance, kept
+        /// between <see cref="MinLead"/> and <see cref="MaxLead"/>. Two creatures less
+        /// than 5 m apart can therefore swap the banner, while the 5 m hysteresis still
+        /// holds at range.
+        /// </summary>
+        private static float RequiredLead(float distance)
+        {
+            return Mathf.Clamp(distance * LeadRatio, MinLead, MaxLead);
         }
 
         private void ForgetUnavailable()
