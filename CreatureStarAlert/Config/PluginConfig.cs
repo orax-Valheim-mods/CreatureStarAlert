@@ -153,7 +153,7 @@ namespace CreatureStarAlert.Config
                 file,
                 DetectionSection,
                 nameof(ScanIntervalSeconds),
-                1f,
+                3f,
                 new ConfigDescription(
                     "How often, in seconds, loaded zones are scanned for star creatures.",
                     new AcceptableValueRange<float>(0.25f, 30f)
