@@ -170,7 +170,7 @@ namespace CreaturesStarsWatcher.Config
                 file,
                 AlertSection,
                 nameof(Anchor),
-                PositionTopCenter,
+                PositionCenter,
                 new ConfigDescription(
                     "Point of the banner placed at the position: TopLeft puts its top "
                         + "left corner there, Center its centre, and so on.",
@@ -205,7 +205,7 @@ namespace CreaturesStarsWatcher.Config
                 file,
                 AlertSection,
                 nameof(PositionY),
-                18,
+                5,
                 new ConfigDescription(
                     "Vertical position of the anchor: percent of the screen height "
                         + "(0 = top edge, 100 = bottom edge), or pixels from the top edge "
@@ -380,8 +380,8 @@ namespace CreaturesStarsWatcher.Config
                     return BannerAnchor.BottomCenter;
                 case PositionBottomRight:
                     return BannerAnchor.BottomRight;
-                default: // PositionTopCenter, and anything unrecognised
-                    return BannerAnchor.TopCenter;
+                default: // anything unrecognised falls back to the default anchor
+                    return BannerAnchor.Center;
             }
         }
 
