@@ -17,8 +17,9 @@ you, so you never miss a two star moose (or any other creature you configure).
 - The banner look is configurable: the colours of the name, the stars and the
   distance, the rectangle behind the text (shown by default, with its own opacity),
   its position, its font size and how long it stays.
-- The banner disappears as soon as the creature is unloaded (zone change) or
-  dead, and shows up again when its zone is loaded anew.
+- The banner disappears as soon as the creature is unloaded (zone change), dead
+  or out of the detection radius, and shows up again when it comes back or its
+  zone is loaded anew.
 - The closest detected creature wins the banner: loaded zones are scanned best
   first, and a nearer creature takes the banner over once it leads by a distance
   that shrinks at close range (0.5 to 5 m), so stepping up to another creature a
@@ -38,9 +39,9 @@ launch. Every setting can also be changed in game with **ConfigurationManager**.
 | General | Debug logging | `false` | Log every detection decision (troubleshooting). |
 | Detection | Stars minimum | `2` | Minimum stars required (alerts trigger at `>=` this value). |
 | Detection | Creature patterns | `*` | Creatures to watch, e.g. `Moose, Troll*`. `*` = everything. |
-| Detection | Max distance | `100` | Maximum distance in metres (capped at 500), `0` = no distance filter. |
+| Detection | Max distance | `100` | Maximum distance in metres (capped at 500), `0` = no distance filter; the banner drops beyond it. |
 | Detection | Include loaded creatures | `true` | Also alert for creatures found when entering a zone. |
-| Detection | Re alert on zone load | `true` | Alert again when a zone is loaded with the same creature. |
+| Detection | Re alert on zone load | `true` | Alert again when a zone is loaded with the same creature or it comes back within the radius. |
 | Detection | Scan interval seconds | `3` | How often loaded zones are scanned. |
 | Alert | Duration seconds | `0` | How long the banner stays on screen; `0` = until the creature is unloaded or dies. |
 | Alert | Anchor | `Center` | Point of the banner placed at the position: `TopLeft`, `TopCenter`, `TopRight`, `Left`, `Center`, `Right`, `BottomLeft`, `BottomCenter`, `BottomRight`. Changing it barely moves the banner: change `Position x` and `Position y` to move the banner on screen. |

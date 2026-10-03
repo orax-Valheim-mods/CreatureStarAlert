@@ -39,8 +39,9 @@ namespace CreatureStarAlert.Config
         bool IncludeLoadedCreatures { get; }
 
         /// <summary>
-        /// Forget the alert of a creature when it is unloaded, so that loading its zone
-        /// again raises a new alert. When false, a creature is only alerted once per world session.
+        /// Forget the alert of a creature when it is unloaded or leaves the detection
+        /// radius, so that appearing again raises a new alert. When false, a creature
+        /// is only alerted once per world session.
         /// </summary>
         bool ReAlertOnZoneLoad { get; }
 

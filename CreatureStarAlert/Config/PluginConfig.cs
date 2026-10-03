@@ -132,8 +132,8 @@ namespace CreatureStarAlert.Config
                 DetectionSection,
                 nameof(ReAlertOnZoneLoad),
                 true,
-                "Forget the alert of a creature when it unloads, so loading its zone again raises a new alert. "
-                    + "When false, each creature is only alerted once per world session."
+                "Forget the alert of a creature when it unloads or leaves the detection radius, "
+                    + "so appearing again raises a new alert. When false, each creature is only alerted once per world session."
             );
 
             _scanIntervalSeconds = Bind(

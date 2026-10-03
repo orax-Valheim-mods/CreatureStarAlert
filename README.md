@@ -13,7 +13,8 @@ with **n stars** appears near the player, so a two star moose never goes unnotic
   already present when you enter or load a zone.
 - Anti-spam: one alert per creature.
 - The banner shows the localised name, the stars and the live distance with a
-  configurable font size, and disappears as soon as the creature is unloaded or dead.
+  configurable font size, and disappears as soon as the creature is unloaded,
+  dead or out of the detection radius.
 - The closest detected creature wins the banner: a nearer one takes it over, and only
   the best alerts are kept waiting behind it. With the `Prefer most stars` setting
   enabled, the creature with the most stars wins instead, ties being broken by distance.
