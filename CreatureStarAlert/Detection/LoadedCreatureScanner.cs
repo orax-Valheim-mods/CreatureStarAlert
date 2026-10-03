@@ -10,14 +10,14 @@ namespace CreatureStarAlert.Detection
     /// ones, best first, so the most interesting creatures are alerted first. Every
     /// loaded creature is evaluated on each scan; the manager owns the anti-spam rules,
     /// this class only owns the "what is loaded right now" view and forgets the
-    /// creatures that are not instantiated anymore, so that loading a zone again raises
-    /// a new alert.
+    /// creatures that are not instantiated anymore or left the detection radius, so
+    /// that they raise a new alert when they reappear.
     /// </summary>
     public sealed class LoadedCreatureScanner
     {
         private readonly IDetectionConfig _config;
         private readonly IAlertManager _manager;
-        private readonly HashSet<ZDOID> _loadedIds = new HashSet<ZDOID>();
+        private readonly HashSet<ZDOID> _keptIds = new HashSet<ZDOID>();
         private readonly List<Character> _ranked = new List<Character>();
         private readonly Comparison<Character> _bestFirst;
 
@@ -43,7 +43,7 @@ namespace CreatureStarAlert.Detection
         /// <summary>Forgets the loaded creatures; called when leaving a world.</summary>
         public void Reset()
         {
-            _loadedIds.Clear();
+            _keptIds.Clear();
             _ranked.Clear();
             _accumulator = 0f;
         }
@@ -62,7 +62,7 @@ namespace CreatureStarAlert.Detection
 
         private void Scan()
         {
-            _loadedIds.Clear();
+            _keptIds.Clear();
             _ranked.Clear();
             foreach (Character character in Character.GetAllCharacters())
             {
@@ -77,7 +77,10 @@ namespace CreatureStarAlert.Detection
                     continue;
                 }
 
-                _loadedIds.Add(id);
+                if (KeepsAlert(character))
+                {
+                    _keptIds.Add(id);
+                }
 
                 if (_config.IncludeLoadedCreatures)
                 {
@@ -93,11 +96,22 @@ namespace CreatureStarAlert.Detection
                 _manager.Report(character, AlertReason.Loaded);
             }
 
-            // Creatures that unloaded are forgotten, so loading them again alerts.
+            // Creatures that unloaded or left the radius are forgotten, so they alert again.
             if (_config.ReAlertOnZoneLoad)
             {
-                _manager.ForgetUnavailable(_loadedIds);
+                _manager.ForgetUnavailable(_keptIds);
             }
+        }
+
+        /// <summary>
+        /// Whether the creature keeps its alert: instantiated and within the detection
+        /// radius, which the game itself cannot guarantee for interiors such as
+        /// dungeons, whose rooms sit thousands of metres away and stay instantiated
+        /// after the player leaves them.
+        /// </summary>
+        private bool KeepsAlert(Character character)
+        {
+            return _config.MaxDistance <= 0f || DistanceToPlayer(character) <= _config.MaxDistance;
         }
 
         private static float DistanceToPlayer(Character character)

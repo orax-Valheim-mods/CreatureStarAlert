@@ -66,14 +66,14 @@ namespace CreatureStarAlert.Detection
             _alerted.Clear();
         }
 
-        public void ForgetUnavailable(IEnumerable<ZDOID> loadedCreatures)
+        public void ForgetUnavailable(IEnumerable<ZDOID> relevantCreatures)
         {
-            if (loadedCreatures == null)
+            if (relevantCreatures == null)
             {
                 return;
             }
 
-            _alerted.IntersectWith(loadedCreatures);
+            _alerted.IntersectWith(relevantCreatures);
         }
 
         private AlertOutcome Evaluate(
@@ -134,7 +134,15 @@ namespace CreatureStarAlert.Detection
             }
 
             _alerted.Add(id);
-            alert = new CreatureAlert(prefabName, displayName, stars, reason, character, distance);
+            alert = new CreatureAlert(
+                prefabName,
+                displayName,
+                stars,
+                reason,
+                character,
+                distance,
+                _config.MaxDistance
+            );
             return AlertOutcome.Alerted;
         }
 

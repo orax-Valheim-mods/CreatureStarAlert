@@ -37,10 +37,11 @@ namespace CreatureStarAlert.Detection
         void Reset();
 
         /// <summary>
-        /// Forgets the alert of the creatures that are not instantiated anymore, so that
-        /// loading them again raises a new alert (see the ReAlertOnZoneLoad setting).
+        /// Forgets the alert of every creature missing from the given set (unloaded or
+        /// out of the detection radius), so that they raise a new alert when they
+        /// appear again (see the ReAlertOnZoneLoad setting).
         /// </summary>
-        /// <param name="loadedCreatures">Creatures currently instantiated.</param>
-        void ForgetUnavailable(IEnumerable<ZDOID> loadedCreatures);
+        /// <param name="relevantCreatures">Creatures that keep their alert: instantiated and within the radius.</param>
+        void ForgetUnavailable(IEnumerable<ZDOID> relevantCreatures);
     }
 }
