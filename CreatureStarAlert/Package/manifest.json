@@ -2,8 +2,8 @@
   "name": "CreatureStarAlert",
   "description": "Shows an on-screen banner when a creature with n stars spawns near you. Creature list, star count, radius and banner are configurable.",
   "version_number": "0.1.0",
-  "website_url": "",
+  "website_url": "https://github.com/orax-Valheim-mods/CreatureStarAlert",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2333"
+    "denikson-BepInExPack_Valheim-5.4.2351"
   ]
 }
