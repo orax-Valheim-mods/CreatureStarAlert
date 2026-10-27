@@ -1,7 +1,11 @@
 Mod for Valheim that displays an on-screen banner as soon as a creature with **n stars** appears
 near the player, so a two star moose never goes unnoticed.
 
-## Features
+# Example
+
+![example](https://i.imgur.com/vEnnDAV.jpeg)
+
+# Features
 
 - Alerts when a creature with `n` stars or more appears (`n` is configurable, default 2).
 - The creatures to watch are configurable: a comma separated list with `*` wildcard.
