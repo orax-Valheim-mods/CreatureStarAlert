@@ -18,7 +18,7 @@ namespace CreatureStarAlert
     {
         public const string PluginGUID = "orax.CreatureStarAlert";
         public const string PluginName = "CreatureStarAlert";
-        public const string PluginVersion = "0.1.0";
+        public const string PluginVersion = "0.2.0";
 
         internal static CreatureStarAlert Instance { get; private set; }
 

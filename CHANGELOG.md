@@ -1,84 +1,105 @@
-# Changelog
+## [0.2.0] - 2026-11-06
 
+### 🚀 Features
+
+- *(detection)* Ignore tamed creatures
+
+### 🐛 Bug Fixes
+
+- *(banner)* Drop the banner when the mod is disabled
+- *(detection)* Re-evaluate the alerts when a detection setting changes
+
+### 📚 Documentation
+
+- Add example image to README.md
+- *(workflows)* Align the upload callers with the publish template
+
+### ⚙️ Miscellaneous Tasks
+
+- *(publish)* Add Thunderstore upload workflow
+- *(changelog)* Reset cliff.toml to default template
 ## [0.1.0] - 2026-10-27
 
-### Added
+### 🚀 Features
 
-- Add BepInEx settings for star creature alerts
-- Add fading on-screen banner for star alerts
-- Add ReAlertOnZoneLoad setting
-- Add a banner font size setting
-- Add an option to alert on the most starred creature
-- Add the corner and side positions to the banner
-- Add settings for the text colours and the rectangle
-- Add a prettier configuration
-
-### Changed
-
-- Init
-- Turn star creatures into alerts
+- *(config)* Add BepInEx settings for star creature alerts
+- *(detection)* Turn star creatures into alerts
+- *(ui)* Add fading on-screen banner for star alerts
 - Wire detection and banner to creature level ups
+- *(config)* Add ReAlertOnZoneLoad setting
+- *(detection)* Report loaded creatures closest first
+- *(ui)* Keep the closest detected creature on the banner
+- *(detection)* Let a nearer creature break the cooldown
+- *(config)* Add a banner font size setting
+- *(config)* Allow StarsMinimum up to 9
+- *(config)* Add an option to alert on the most starred creature
+- *(detection)* Rank the loaded creatures on the alert criterion
+- *(ui)* Show the creature winning the criterion on the banner
+- *(config)* Display the setting keys with spaces
+- *(ui)* Keep the banner on screen while Duration seconds is 0
+- *(ui)* Add the corner and side positions to the banner
+- *(ui)* Position the banner with an anchor and percentages
+- *(config)* Let the banner position be given in pixels
+- *(config)* Default the banner to the centre near the top
+- *(config)* Add settings for the text colours and the rectangle
+- *(ui)* Draw the banner with the configured colours and rectangle
+- *(config)* Default the scan interval to 3 seconds
+- *(config)* Default Duration seconds to 0
+
+### 🐛 Bug Fixes
+
+- *(detection)* Raise the alert again when a zone is loaded
+- *(ui)* Drop the banner when the creature is unloaded
+- *(config)* Bound MaxDistance to the game zone loading range
+- *(ui)* Let nearby creatures take the banner over
+- *(detection)* Drop and forget alerts outside the detection radius
+- Write forward slashes in release ZIP entry paths
+
+### 📚 Documentation
+
 - Describe the mod and its configuration
-- Set Thunderstore metadata for CreaturesStarsWatcher
 - Document the ReAlertOnZoneLoad setting
 - Mention that the banner follows the creature lifetime
 - Describe MaxDistance as bounded by zone unloading
-- Report loaded creatures closest first
-- Keep the closest detected creature on the banner
 - Document the closest creature priority
-- Let a nearer creature break the cooldown
 - Mention that a nearer creature is not held back by the cooldown
 - Document the banner font size setting
-- Allow StarsMinimum up to 9
-- Rank the loaded creatures on the alert criterion
-- Show the creature winning the criterion on the banner
 - Document the alert creature criterion
-- Display the setting keys with spaces
 - Use the readable setting keys in the documentation
-- Keep the banner on screen while Duration seconds is 0
 - Document the indefinite banner duration
 - Document how far ahead the candidate must be
 - List the nine banner positions
-- Position the banner with an anchor and percentages
 - Document the anchor and percentage positions
-- Let the banner position be given in pixels
 - Document the position unit
-- Default the banner to the centre near the top
 - Update the default banner position
-- Draw the banner with the configured colours and rectangle
 - Document the text colours and rectangle settings
-- Rename the mod to CreatureStarAlert
 - Use the new mod name in the documentation
-- Default the scan interval to 3 seconds
 - Match the scan interval default in the settings table
-- Explain that Position x and y move the banner
+- *(config)* Explain that Position x and y move the banner
 - Drop the cooldown from the readmes
-- Default Duration seconds to 0
 - Match the Duration seconds default
 - Document the banner drop outside the detection radius
-- Call the reusable workflows from orax-modding/publish
-- Enforce LF line endings via .gitattributes and .editorconfig
-- Generate changelog and upload release to GitHub in post-build script
-- Set website_url and align on BepInExPack 5.4.2351
-- Drop the UnityEngine.ProfilerModule reference (MSB3245)
 - Rewrite the root README as the mod page
-- Stop tracking the packaged README
-- Update the mod icon
-- Use 7-Zip instead of .NET compression for release archives
 
-### Fixed
+### 🚜 Refactor
 
-- Raise the alert again when a zone is loaded
-- Drop the banner when the creature is unloaded
-- Bound MaxDistance to the game zone loading range
-- Let nearby creatures take the banner over
-- Drop and forget alerts outside the detection radius
-- Write forward slashes in release ZIP entry paths
+- [**breaking**] Rename the mod to CreatureStarAlert
+- *(config)* [**breaking**] Remove the Cooldown seconds option
 
-### Removed
+### ⚙️ Miscellaneous Tasks
 
-- Remove the Cooldown seconds option
+- Init
+- *(package)* Set Thunderstore metadata for CreaturesStarsWatcher
+- *(publish)* Call the reusable workflows from orax-modding/publish
+- Enforce LF line endings via .gitattributes and .editorconfig
+- *(ci)* Generate changelog and upload release to GitHub in post-build script
+- *(manifest)* Set website_url and align on BepInExPack 5.4.2351
+- Add a prettier configuration
+- *(package)* Stop tracking the packaged README
+- *(package)* Update the mod icon
+- *(publish)* Use 7-Zip instead of .NET compression for release archives
+- *(release)* Bump version to v0.1.0
 
-[0.1.0]: https://github.com/orax-Valheim-mods/CreatureStarAlert/tree/0.1.0
+### 💼 Other
 
-<!-- generated by git-cliff -->
+- Drop the UnityEngine.ProfilerModule reference (MSB3245)
