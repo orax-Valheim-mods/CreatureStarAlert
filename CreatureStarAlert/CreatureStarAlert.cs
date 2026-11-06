@@ -24,29 +24,32 @@ namespace CreatureStarAlert
         /// <summary>Entry point used by the Harmony patches to report new star creatures.</summary>
         internal IAlertManager AlertManager { get; private set; }
 
+        private PluginConfig _config;
         private Harmony _harmony;
         private LoadedCreatureScanner _scanner;
         private BannerUI _banner;
         private bool _wasInWorld;
+        private bool _enabled;
 
         private void Awake()
         {
             Instance = this;
 
-            var config = new PluginConfig(Config);
-            ICreatureFilter filter = new WildcardCreatureFilter(config);
-            _banner = new BannerUI(config, Logger);
-            AlertManager = new AlertManager(config, filter, _banner, Logger);
-            _scanner = new LoadedCreatureScanner(config, AlertManager);
+            _config = new PluginConfig(Config);
+            _enabled = _config.Enabled;
+            ICreatureFilter filter = new WildcardCreatureFilter(_config);
+            _banner = new BannerUI(_config, Logger);
+            AlertManager = new AlertManager(_config, filter, _banner, Logger);
+            _scanner = new LoadedCreatureScanner(_config, AlertManager);
 
             _harmony = new Harmony(PluginGUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             Logger.LogInfo(
-                $"{PluginName} {PluginVersion} loaded: stars >= {config.StarsMinimum}, "
-                    + $"creatures '{config.CreaturePatterns}', radius "
-                    + (config.MaxDistance > 0f ? $"{config.MaxDistance} m" : "no filter")
-                    + $", priority {(config.PreferMostStars ? "most stars" : "closest")}"
+                $"{PluginName} {PluginVersion} loaded: stars >= {_config.StarsMinimum}, "
+                    + $"creatures '{_config.CreaturePatterns}', radius "
+                    + (_config.MaxDistance > 0f ? $"{_config.MaxDistance} m" : "no filter")
+                    + $", priority {(_config.PreferMostStars ? "most stars" : "closest")}"
             );
         }
 
@@ -62,13 +65,39 @@ namespace CreatureStarAlert
             }
 
             _wasInWorld = inWorld;
-            if (!inWorld)
+            ApplyEnabled();
+
+            if (!inWorld || !_enabled)
             {
                 return;
             }
 
             _scanner.Tick(Time.deltaTime);
             _banner.Tick(Time.deltaTime);
+        }
+
+        /// <summary>
+        /// Takes the banner down as soon as the mod is disabled in game. No alert is
+        /// reported anymore once it is off, so nothing else would remove the one on
+        /// screen, and the creatures still around must alert again when it is turned
+        /// back on.
+        /// </summary>
+        private void ApplyEnabled()
+        {
+            bool enabled = _config.Enabled;
+            if (enabled == _enabled)
+            {
+                return;
+            }
+
+            _enabled = enabled;
+            if (enabled)
+            {
+                return;
+            }
+
+            AlertManager.Reset();
+            _banner.Clear();
         }
 
         private void OnGUI()
