@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using BepInEx;
 using CreatureStarAlert.Config;
@@ -31,11 +32,15 @@ namespace CreatureStarAlert
         private bool _wasInWorld;
         private bool _enabled;
 
+        /// <summary>Set from the config thread, consumed on the main thread by <see cref="Update"/>.</summary>
+        private volatile bool _detectionChanged;
+
         private void Awake()
         {
             Instance = this;
 
             _config = new PluginConfig(Config);
+            _config.DetectionChanged += OnDetectionChanged;
             _enabled = _config.Enabled;
             ICreatureFilter filter = new WildcardCreatureFilter(_config);
             _banner = new BannerUI(_config, Logger);
@@ -66,6 +71,7 @@ namespace CreatureStarAlert
 
             _wasInWorld = inWorld;
             ApplyEnabled();
+            ApplyDetectionChanges();
 
             if (!inWorld || !_enabled)
             {
@@ -96,8 +102,36 @@ namespace CreatureStarAlert
                 return;
             }
 
+            DropAlerts();
+        }
+
+        /// <summary>
+        /// Drops the banner and forgets the alerts raised before a detection setting changed:
+        /// a creature already alerted must alert again once it is watched, and the one on
+        /// screen must leave as soon as the new settings do not watch it. The next scan then
+        /// reports the creatures that qualify now.
+        /// </summary>
+        private void ApplyDetectionChanges()
+        {
+            if (!_detectionChanged)
+            {
+                return;
+            }
+
+            _detectionChanged = false;
+            DropAlerts();
+        }
+
+        /// <summary>Drops the banner and forgets the alerts raised so far.</summary>
+        private void DropAlerts()
+        {
             AlertManager.Reset();
             _banner.Clear();
+        }
+
+        private void OnDetectionChanged(object sender, EventArgs e)
+        {
+            _detectionChanged = true;
         }
 
         private void OnGUI()
@@ -107,6 +141,11 @@ namespace CreatureStarAlert
 
         private void OnDestroy()
         {
+            if (_config != null)
+            {
+                _config.DetectionChanged -= OnDetectionChanged;
+            }
+
             _harmony?.UnpatchSelf();
             if (Instance == this)
             {

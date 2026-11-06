@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using BepInEx.Configuration;
 using UnityEngine;
@@ -314,6 +315,27 @@ namespace CreatureStarAlert.Config
                 "When several star creatures are detected, show the one with the most stars "
                     + "instead of the closest one. Ties are always broken by distance."
             );
+
+            // The alerts already raised are judged on these settings: changing one must
+            // re-evaluate the creatures around, or the banner keeps showing a creature
+            // that the new settings do not watch anymore.
+            _starsMinimum.SettingChanged += OnDetectionChanged;
+            _creaturePatterns.SettingChanged += OnDetectionChanged;
+            _maxDistance.SettingChanged += OnDetectionChanged;
+            _ignoreTamed.SettingChanged += OnDetectionChanged;
+            _includeLoadedCreatures.SettingChanged += OnDetectionChanged;
+        }
+
+        /// <summary>
+        /// Raised when a setting deciding whether a creature is watched changes, in game or
+        /// in the .cfg file, so the watcher can re-evaluate the creatures around. It may be
+        /// raised from a thread other than the main one.
+        /// </summary>
+        public event EventHandler DetectionChanged;
+
+        private void OnDetectionChanged(object sender, EventArgs e)
+        {
+            DetectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public bool Enabled => _enabled.Value;
