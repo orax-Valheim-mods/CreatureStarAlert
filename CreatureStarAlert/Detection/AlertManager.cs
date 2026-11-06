@@ -100,6 +100,11 @@ namespace CreatureStarAlert.Detection
                 return AlertOutcome.NotWatched;
             }
 
+            if (_config.IgnoreTamed && character.IsTamed())
+            {
+                return AlertOutcome.NotWatched;
+            }
+
             ZDOID id = character.GetZDOID();
             if (id.IsNone())
             {

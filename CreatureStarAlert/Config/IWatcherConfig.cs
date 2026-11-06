@@ -35,6 +35,12 @@ namespace CreatureStarAlert.Config
         /// </summary>
         float MaxDistance { get; }
 
+        /// <summary>
+        /// Whether tamed creatures are ignored. A wild creature that was tamed after its
+        /// alert keeps the banner until it is unloaded or dies.
+        /// </summary>
+        bool IgnoreTamed { get; }
+
         /// <summary>Whether creatures already present when a zone is loaded or entered are considered.</summary>
         bool IncludeLoadedCreatures { get; }
 

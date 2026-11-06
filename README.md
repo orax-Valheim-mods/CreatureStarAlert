@@ -9,6 +9,8 @@ near the player, so a two star moose never goes unnoticed.
 
 - Alerts when a creature with `n` stars or more appears (`n` is configurable, default 2).
 - The creatures to watch are configurable: a comma separated list with `*` wildcard.
+- Tamed creatures are ignored by default (`Ignore tamed`), so a farm full of starred animals
+  stays quiet. Turn the setting off to be alerted about them as well.
 - Configurable detection radius (default 100 m, `0` = no distance filter: the game itself unloads
   zones and their creatures beyond its simulation distance, about 200 m with the default settings).
 - The banner shows the localised name, the stars and the live distance and disappears as soon as the

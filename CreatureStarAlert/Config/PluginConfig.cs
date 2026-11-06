@@ -47,6 +47,7 @@ namespace CreatureStarAlert.Config
         private readonly ConfigEntry<int> _starsMinimum;
         private readonly ConfigEntry<string> _creaturePatterns;
         private readonly ConfigEntry<float> _maxDistance;
+        private readonly ConfigEntry<bool> _ignoreTamed;
         private readonly ConfigEntry<bool> _includeLoadedCreatures;
         private readonly ConfigEntry<bool> _reAlertOnZoneLoad;
         private readonly ConfigEntry<float> _scanIntervalSeconds;
@@ -117,6 +118,15 @@ namespace CreatureStarAlert.Config
                         + "a larger value could never make a difference.",
                     new AcceptableValueRange<float>(0f, MaxLoadedCreatureDistance)
                 )
+            );
+
+            _ignoreTamed = Bind(
+                file,
+                DetectionSection,
+                nameof(IgnoreTamed),
+                true,
+                "Ignore tamed creatures: they never raise an alert. Their tamed offspring "
+                    + "inherit their stars, so a farm would otherwise keep the banner busy."
             );
 
             _includeLoadedCreatures = Bind(
@@ -313,6 +323,8 @@ namespace CreatureStarAlert.Config
         public int StarsMinimum => _starsMinimum.Value;
 
         public float MaxDistance => _maxDistance.Value;
+
+        public bool IgnoreTamed => _ignoreTamed.Value;
 
         public bool IncludeLoadedCreatures => _includeLoadedCreatures.Value;
 
