@@ -299,21 +299,77 @@ namespace CreatureStarAlert.UI
                 : alert.DisplayName;
             // Bounded like the StarsMinimum setting, which accepts up to 9 stars.
             int stars = Mathf.Clamp(alert.Stars, 1, 9);
-            string text =
-                $"<color={ToHex(_config.NameColor)}>{name}</color>"
-                + $"  <color={ToHex(_config.StarColor)}>{new string('★', stars)}</color>";
 
-            // The distance is only meaningful while the creature still exists.
+            string arrow = _config.ShowArrow ? DirectionArrow(player, alert) : string.Empty;
+            if (arrow.Length > 0)
+            {
+                arrow = $"<color={ToHex(_config.ArrowColor)}>{arrow}</color>";
+            }
+
+            // The distance is only meaningful while the creature still exists, and
+            // its parentheses belong to the value so hiding it leaves nothing behind.
+            string distance = string.Empty;
             if (_config.ShowDistance && alert.IsAvailable)
             {
-                float distance = Vector3.Distance(
+                float metres = Vector3.Distance(
                     player.transform.position,
                     alert.Character.transform.position
                 );
-                text += $"  <color={ToHex(_config.DistanceColor)}>({distance:0} m)</color>";
+                distance = $"<color={ToHex(_config.DistanceColor)}>({metres:0} m)</color>";
             }
 
-            return text;
+            // A placeholder hidden by its setting leaves its separators at the ends
+            // of the template, which the trim clears.
+            string format = _config.BannerFormat ?? string.Empty;
+            return format
+                .Replace("{arrow}", arrow)
+                .Replace("{name}", $"<color={ToHex(_config.NameColor)}>{name}</color>")
+                .Replace(
+                    "{stars}",
+                    $"<color={ToHex(_config.StarColor)}>{new string('★', stars)}</color>"
+                )
+                .Replace("{distance}", distance)
+                .Trim();
+        }
+
+        /// <summary>
+        /// Arrow pointing at the creature the way the camera faces: the configured glyph
+        /// turned towards the yaw of the creature, or nothing when the creature sits on
+        /// the player, there is no camera to compare against, or no glyph is configured.
+        /// The recorded position is used once the creature is gone, like the distance.
+        /// </summary>
+        private string DirectionArrow(Player player, CreatureAlert alert)
+        {
+            string glyph = _config.ArrowGlyph;
+            if (string.IsNullOrEmpty(glyph))
+            {
+                return string.Empty;
+            }
+
+            Vector3 creature = alert.IsAvailable
+                ? alert.Character.transform.position
+                : alert.Position;
+            Vector3 towards = creature - player.transform.position;
+            towards.y = 0f;
+
+            Camera camera = Camera.main;
+            Vector3 forward = camera != null ? camera.transform.forward : player.transform.forward;
+            forward.y = 0f;
+
+            // No direction to compare against: directly above, below, or on the player.
+            if (towards.sqrMagnitude < 0.0001f || forward.sqrMagnitude < 0.0001f)
+            {
+                return string.Empty;
+            }
+
+            float yaw = Vector3.SignedAngle(forward, towards, Vector3.up);
+            // Whole degrees, so no culture specific decimal separator ends up in the tag.
+            // A positive yaw is clockwise on screen while the tag turns positive degrees
+            // the other way round, hence the sign. The offset joins the tag value, so a
+            // positive offset turns the glyph counter-clockwise like the tag does.
+            // Wrapped to +-360, so the tag always gets an angle in its own range.
+            int rotation = (-Mathf.RoundToInt(yaw) + _config.ArrowRotationOffset) % 360;
+            return $"<rotate={rotation}>{glyph}</rotate>";
         }
 
         /// <summary>

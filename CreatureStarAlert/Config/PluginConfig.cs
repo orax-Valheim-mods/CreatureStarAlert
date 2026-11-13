@@ -63,6 +63,11 @@ namespace CreatureStarAlert.Config
         private readonly ConfigEntry<bool> _showRectangle;
         private readonly ConfigEntry<int> _rectangleOpacity;
         private readonly ConfigEntry<bool> _showDistance;
+        private readonly ConfigEntry<string> _bannerFormat;
+        private readonly ConfigEntry<bool> _showArrow;
+        private readonly ConfigEntry<string> _arrowGlyph;
+        private readonly ConfigEntry<int> _arrowRotationOffset;
+        private readonly ConfigEntry<Color> _arrowColor;
         private readonly ConfigEntry<int> _maxQueuedAlerts;
         private readonly ConfigEntry<int> _fontSize;
         private readonly ConfigEntry<bool> _preferMostStars;
@@ -255,6 +260,14 @@ namespace CreatureStarAlert.Config
                 "Colour of the distance, as a RRGGBBAA hex value (A8A8A8FF = light grey)."
             );
 
+            _arrowColor = Bind(
+                file,
+                AlertSection,
+                nameof(ArrowColor),
+                (Color)new Color32(255, 255, 255, 255),
+                "Colour of the direction arrow, as a RRGGBBAA hex value (FFFFFFFF = opaque white)."
+            );
+
             _showRectangle = Bind(
                 file,
                 AlertSection,
@@ -281,6 +294,51 @@ namespace CreatureStarAlert.Config
                 nameof(ShowDistance),
                 true,
                 "Show the live distance to the creature in the banner."
+            );
+
+            _bannerFormat = Bind(
+                file,
+                AlertSection,
+                nameof(BannerFormat),
+                "{arrow}  {name}  {stars}  {distance}",
+                "Template of the banner text. Placeholders: {arrow} direction arrow, "
+                    + "{name} creature name, {stars} stars, {distance} distance in metres "
+                    + "with its parentheses. Each placeholder keeps its configured colour, "
+                    + "and the arrow or the distance renders empty when its setting hides "
+                    + "it. Any other text is kept as is, so the layout is free, for "
+                    + "example '{arrow} | {name} {stars} | {distance}'."
+            );
+
+            _showArrow = Bind(
+                file,
+                AlertSection,
+                nameof(ShowArrow),
+                true,
+                "Show the arrow pointing towards the creature in the banner."
+            );
+
+            _arrowGlyph = Bind(
+                file,
+                AlertSection,
+                nameof(ArrowGlyph),
+                "➤",
+                "Glyph used for the direction arrow, turned towards the creature. It is "
+                    + "expected to point straight ahead, so any single character works. "
+                    + "An empty value shows no arrow."
+            );
+
+            _arrowRotationOffset = Bind(
+                file,
+                AlertSection,
+                nameof(ArrowRotationOffset),
+                90,
+                new ConfigDescription(
+                    "Degrees added to the arrow rotation: 0 keeps the yaw based rotation, "
+                        + "a positive value turns the glyph counter-clockwise, a negative "
+                        + "one clockwise. Handy for a glyph that does not point straight "
+                        + "ahead.",
+                    new AcceptableValueRange<int>(-360, 360)
+                )
             );
 
             _maxQueuedAlerts = Bind(
@@ -368,11 +426,21 @@ namespace CreatureStarAlert.Config
 
         public bool ShowDistance => _showDistance.Value;
 
+        public string BannerFormat => _bannerFormat.Value;
+
+        public bool ShowArrow => _showArrow.Value;
+
+        public string ArrowGlyph => _arrowGlyph.Value;
+
+        public int ArrowRotationOffset => _arrowRotationOffset.Value;
+
         public Color NameColor => _nameColor.Value;
 
         public Color StarColor => _starColor.Value;
 
         public Color DistanceColor => _distanceColor.Value;
+
+        public Color ArrowColor => _arrowColor.Value;
 
         public bool ShowRectangle => _showRectangle.Value;
 

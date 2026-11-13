@@ -83,11 +83,36 @@ namespace CreatureStarAlert.Config
         /// <summary>Whether PositionX and PositionY are percents of the screen or pixels.</summary>
         PositionUnit PositionUnit { get; }
 
+        /// <summary>
+        /// Template of the banner text. The {arrow}, {name}, {stars} and {distance}
+        /// placeholders are replaced by their coloured value; the rest is kept as is.
+        /// </summary>
+        string BannerFormat { get; }
+
         /// <summary>Whether the live distance to the creature is displayed.</summary>
         bool ShowDistance { get; }
 
+        /// <summary>Whether the arrow pointing towards the creature is displayed.</summary>
+        bool ShowArrow { get; }
+
+        /// <summary>
+        /// Glyph of the direction arrow, expected to point straight ahead and rotated
+        /// towards the yaw of the creature. Empty hides the arrow.
+        /// </summary>
+        string ArrowGlyph { get; }
+
+        /// <summary>
+        /// Degrees added to the arrow rotation, so a glyph pointing off centre can be
+        /// corrected or a different orientation can be picked. Positive turns the glyph
+        /// counter-clockwise, like the rotate tag.
+        /// </summary>
+        int ArrowRotationOffset { get; }
+
         /// <summary>Colour of the creature name in the banner text.</summary>
         Color NameColor { get; }
+
+        /// <summary>Colour of the direction arrow in the banner text.</summary>
+        Color ArrowColor { get; }
 
         /// <summary>Colour of the stars in the banner text.</summary>
         Color StarColor { get; }
