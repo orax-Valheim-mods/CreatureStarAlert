@@ -1,3 +1,8 @@
+## [0.3.0] - 2026-11-24
+
+### 🚀 Features
+
+- *(banner)* Add a direction arrow and a text template
 ## [0.2.0] - 2026-11-06
 
 ### 🚀 Features
@@ -18,6 +23,7 @@
 
 - *(publish)* Add Thunderstore upload workflow
 - *(changelog)* Reset cliff.toml to default template
+- *(release)* Bump version to v0.2.0
 ## [0.1.0] - 2026-10-27
 
 ### 🚀 Features
